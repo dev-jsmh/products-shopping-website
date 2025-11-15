@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.devjsmh.icea.content_manager_service.core.Exceptions.NoSuchEntityExistsException;
+
 /**
  * @author Jhonatan Samuel Martinez
  */
@@ -51,21 +53,15 @@ public class ContentTypeService {
      */
     public ContentTypeEntity getByIdV1(Long id) {
 
-        try {
+        // finds and optional record from the database
+        Optional<ContentTypeEntity> OptContentType = this.contentTypeRepository.findById(id);
 
-            // finds and optional record from the database
-            Optional<ContentTypeEntity> OptContentType = this.contentTypeRepository.findById(id);
-
-            if (OptContentType.isPresent()) {
-                // the entity is not found
-                return OptContentType.get();
-            }
-
-            throw new RuntimeException("the record with id " + id + " was not found");
-
-        } catch (Exception ex) {
-            throw new RuntimeException("Error when trying to get the content-type with id: " + id + " from database");
+        if (OptContentType.isPresent()) {
+            // the entity is not found
+            return OptContentType.get();
         }
+
+        throw new NoSuchEntityExistsException("ContentType", "id", id.toString());
     }
 
     /**
@@ -77,20 +73,15 @@ public class ContentTypeService {
     public ContentTypeEntity updateByIdV1(ContentTypeEntity request, Long id) {
 
         ContentTypeEntity entity = null;
-        try {
-            // finds and optional record from the database
-            Optional<ContentTypeEntity> OptContentType = this.contentTypeRepository.findById(id);
+        // finds and optional record from the database
+        Optional<ContentTypeEntity> OptContentType = this.contentTypeRepository.findById(id);
 
-            if (OptContentType.isPresent()) {
-                entity = OptContentType.get();
-            } else {
-                // the entity is not found
-                throw new RuntimeException("The record with id " + id + " was not found");
-            }
-
-        } catch (Exception ex) {
-            throw new RuntimeException("Error when trying to get the content-type with id: " + id + " from database");
+        if (!OptContentType.isPresent()) {
+            // the entity is not found
+            throw new NoSuchEntityExistsException("ContentType", "id", id.toString());
         }
+
+        entity = OptContentType.get();
 
         // check if the values are not empty and are different to the original one set
         // before
@@ -128,18 +119,12 @@ public class ContentTypeService {
      */
     public void deleteByIdV1(Long id) {
 
-        try {
-            // finds and optional record from the database
-            Optional<ContentTypeEntity> OptContentType = this.contentTypeRepository.findById(id);
-
-            if (OptContentType.isEmpty()) {
-                // the entity is not found
-                throw new RuntimeException("The record with id " + id + " not exists");
-            }
-
-        } catch (Exception ex) {
-            throw new RuntimeException("Error when trying to get the content-type with id: " + id + " from database");
-        }
+        // finds and optional record from the database
+        this.contentTypeRepository.findById(id)
+                .orElseThrow(() -> new NoSuchEntityExistsException(
+                        "ContentType",
+                        "id",
+                        id.toString()));
 
         try {
             this.contentTypeRepository.deleteById(id);
