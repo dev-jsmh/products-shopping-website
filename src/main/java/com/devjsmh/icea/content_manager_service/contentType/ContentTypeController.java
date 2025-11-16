@@ -2,6 +2,8 @@ package com.devjsmh.icea.content_manager_service.contentType;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,33 +34,39 @@ public class ContentTypeController {
     }
 
     @GetMapping("/v1/content-types")
-    public List<ContentTypeDto> getAllV1() {
+    public ResponseEntity<List<ContentTypeDto>> getAllV1() {
         // returns all the saved records
         List<ContentTypeEntity> entities = this.contentTypeService.getAllV1();
-        return this.contentTypeMapper.toDtoList(entities);
+        List<ContentTypeDto> dtos = this.contentTypeMapper.toDtoList(entities);
+        return ResponseEntity.ok().body(dtos);
     }
 
     @GetMapping("/v1/content-types/{id}")
-    public ContentTypeDto getByIdV1(@PathVariable Long id) {
+    public ResponseEntity<ContentTypeDto> getByIdV1(@PathVariable Long id) {
         ContentTypeEntity entity = this.contentTypeService.getByIdV1(id);
-        return this.contentTypeMapper.toDto(entity);
+        ContentTypeDto dto = this.contentTypeMapper.toDto(entity);
+        return ResponseEntity.ok().body(dto);
     }
 
     @PostMapping("/v1/content-types")
-    public ContentTypeDto saveV1(@RequestBody ContentTypeEntity request) {
+    public ResponseEntity<ContentTypeDto> saveV1(@RequestBody ContentTypeEntity request) {
         ContentTypeEntity entity = this.contentTypeService.saveEntityV1(request);
-        return this.contentTypeMapper.toDto(entity);
+        ContentTypeDto dto = this.contentTypeMapper.toDto(entity);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @PutMapping("/v1/content-types/{id}")
-    public ContentTypeDto updateByIdV1(@RequestBody ContentTypeEntity request, @PathVariable Long id) {
+    public ResponseEntity<ContentTypeDto> updateByIdV1(@RequestBody ContentTypeEntity request, @PathVariable Long id) {
         ContentTypeEntity entity = this.contentTypeService.updateByIdV1(request, id);
-        return this.contentTypeMapper.toDto(entity);
+        ContentTypeDto dto = this.contentTypeMapper.toDto(entity);
+        return ResponseEntity.ok().body(dto);
+
     }
 
     @DeleteMapping("/v1/content-types/{id}")
-    public void deletebyIdV1(@PathVariable Long id) {
+    public ResponseEntity<Void> deletebyIdV1(@PathVariable Long id) {
         this.contentTypeService.deleteByIdV1(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
