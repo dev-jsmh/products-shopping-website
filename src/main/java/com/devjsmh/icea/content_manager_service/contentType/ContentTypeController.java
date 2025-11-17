@@ -49,15 +49,17 @@ public class ContentTypeController {
     }
 
     @PostMapping("/v1/content-types")
-    public ResponseEntity<ContentTypeDto> saveV1(@RequestBody ContentTypeEntity request) {
-        ContentTypeEntity entity = this.contentTypeService.saveEntityV1(request);
+    public ResponseEntity<ContentTypeDto> saveV1(@RequestBody ContentTypeDto request) {
+        ContentTypeEntity tempEntity = this.contentTypeMapper.toEntity(request);
+        ContentTypeEntity entity = this.contentTypeService.saveEntityV1(tempEntity);
         ContentTypeDto dto = this.contentTypeMapper.toDto(entity);
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @PutMapping("/v1/content-types/{id}")
-    public ResponseEntity<ContentTypeDto> updateByIdV1(@RequestBody ContentTypeEntity request, @PathVariable Long id) {
-        ContentTypeEntity entity = this.contentTypeService.updateByIdV1(request, id);
+    public ResponseEntity<ContentTypeDto> updateByIdV1(@RequestBody ContentTypeDto request, @PathVariable Long id) {
+        ContentTypeEntity tempEntity = this.contentTypeMapper.toEntity(request);
+        ContentTypeEntity entity = this.contentTypeService.updateByIdV1(tempEntity, id);
         ContentTypeDto dto = this.contentTypeMapper.toDto(entity);
         return ResponseEntity.ok().body(dto);
 
