@@ -41,9 +41,9 @@ public class ContentTypeController {
         return ResponseEntity.ok().body(dtos);
     }
 
-    @GetMapping("/v1/content-types/{id}")
-    public ResponseEntity<ContentTypeDto> getByIdV1(@PathVariable Long id) {
-        ContentTypeEntity entity = this.contentTypeService.getByIdV1(id);
+    @GetMapping("/v1/content-types/{slug}")
+    public ResponseEntity<ContentTypeDto> getBySlugV1(@PathVariable("slug") String slug) {
+        ContentTypeEntity entity = this.contentTypeService.getBySlugV1(slug);
         ContentTypeDto dto = this.contentTypeMapper.toDto(entity);
         return ResponseEntity.ok().body(dto);
     }
@@ -56,18 +56,18 @@ public class ContentTypeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
-    @PutMapping("/v1/content-types/{id}")
-    public ResponseEntity<ContentTypeDto> updateByIdV1(@RequestBody ContentTypeDto request, @PathVariable Long id) {
+    @PutMapping("/v1/content-types/{slug}")
+    public ResponseEntity<ContentTypeDto> updateBySlugV1(@RequestBody ContentTypeDto request, @PathVariable("slug") String slug) {
         ContentTypeEntity tempEntity = this.contentTypeMapper.toEntity(request);
-        ContentTypeEntity entity = this.contentTypeService.updateByIdV1(tempEntity, id);
+        ContentTypeEntity entity = this.contentTypeService.updateBySlugV1(tempEntity, slug);
         ContentTypeDto dto = this.contentTypeMapper.toDto(entity);
         return ResponseEntity.ok().body(dto);
 
     }
 
-    @DeleteMapping("/v1/content-types/{id}")
-    public ResponseEntity<Void> deletebyIdV1(@PathVariable Long id) {
-        this.contentTypeService.deleteByIdV1(id);
+    @DeleteMapping("/v1/content-types/{slug}")
+    public ResponseEntity<Void> deletebySlugV1(@PathVariable("slug") String slug) {
+        this.contentTypeService.deleteBySlugV1(slug);
         return ResponseEntity.noContent().build();
     }
 
