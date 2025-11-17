@@ -21,7 +21,7 @@ public class ContentTypeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "varchar(255)")
+    @Column(columnDefinition = "varchar(255)", unique = true)
     private String slug;
 
     @Column(columnDefinition = "varchar(255)")
