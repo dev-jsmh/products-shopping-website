@@ -70,15 +70,15 @@ public class ContentTypeService {
      * @param request the object with the updated values
      * @param id      the identifycation of the content-type
      */
-    public ContentTypeEntity updateByIdV1(ContentTypeEntity request, Long id) {
+    public ContentTypeEntity updateBySlugV1(ContentTypeEntity request, String slug) {
 
         ContentTypeEntity entity = null;
         // finds and optional record from the database
-        Optional<ContentTypeEntity> OptContentType = this.contentTypeRepository.findById(id);
+        Optional<ContentTypeEntity> OptContentType = this.contentTypeRepository.findBySlug(slug);
 
         if (!OptContentType.isPresent()) {
             // the entity is not found
-            throw new NoSuchEntityExistsException("ContentType", "id", id.toString());
+            throw new NoSuchEntityExistsException("ContentType", "slug", slug);
         }
 
         entity = OptContentType.get();
@@ -117,20 +117,29 @@ public class ContentTypeService {
      * @param id identityfaction of the record to be deleted
      * @version 1
      */
-    public void deleteByIdV1(Long id) {
+    public void deleteBySlugV1(String slug) {
 
         // finds and optional record from the database
-        this.contentTypeRepository.findById(id)
+        ContentTypeEntity entity = this.contentTypeRepository.findBySlug(slug)
                 .orElseThrow(() -> new NoSuchEntityExistsException(
                         "ContentType",
-                        "id",
-                        id.toString()));
+                        "slug",
+                        slug));
 
         try {
-            this.contentTypeRepository.deleteById(id);
+            this.contentTypeRepository.deleteById(entity.getId());
         } catch (IllegalArgumentException iaex) {
             throw iaex;
         }
+    }
+
+    public ContentTypeEntity getBySlugV1(String slug) {
+
+        return this.contentTypeRepository.findBySlug(slug)
+                .orElseThrow(() -> new NoSuchEntityExistsException(
+                        "ContentType",
+                        "slug",
+                        slug));
     }
 
 }
