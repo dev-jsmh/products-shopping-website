@@ -65,4 +65,20 @@ public class ContentController {
         return ResponseEntity.ok().body(dto);
     }
 
+    /**
+     * Gets a content entry by type and content id
+     * 
+     * @param slug from the content-type
+     * @param id   from the content entry
+     * 
+     * @return the found content entry
+     */
+    @GetMapping("/v1/contents/{slug}/{id}")
+    public ResponseEntity<ContentDetailedDto> getByTypeAndIdV1(
+            @PathVariable("slug") String contentTypeSlug,
+            @PathVariable("id") Long contentId) {
+        ContentEntity entity = this.contentService.getByTypeAndIdV1(contentTypeSlug, contentId);
+        ContentDetailedDto dto = this.contentWithContentTypeMapper.toDto(entity);
+        return ResponseEntity.ok().body(dto);
+    }
 }
