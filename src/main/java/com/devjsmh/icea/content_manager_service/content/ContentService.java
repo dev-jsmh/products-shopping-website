@@ -116,15 +116,15 @@ public class ContentService {
 
     /**
      * 
-     * Finds a content entry that belongs to a specified type by content id
+     * Finds a content entry by type and by content id
      * 
-     * ex: getbySlug("blog-post", 3928323)
+     * ex: getByTypeAndId("blog-post", 3928323)
      * 
      * @param slug from the content-type
      * @param id   of the content entry
      * @return the found content entry
      */
-    public ContentEntity getBySlugV1(String slug, Long id) {
+    public ContentEntity getByTypeAndIdV1(String slug, Long id) {
 
         // Todo - handle exection when the param is not provided
         // what exception can i throw
