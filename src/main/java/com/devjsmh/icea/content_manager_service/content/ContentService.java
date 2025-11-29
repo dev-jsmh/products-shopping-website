@@ -132,23 +132,44 @@ public class ContentService {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<ContentEntity> cq = cb.createQuery(ContentEntity.class);
         Root<ContentEntity> contents = cq.from(ContentEntity.class);
-
-        // joins
-        Join<ContentEntity, ContentTypeEntity> contentTypejoin = contents.join("contentType", JoinType.INNER);
-
         // add all the predicates and queries needed
-        Predicate slugEqualPr = cb.equal(contentTypejoin.get("slug"), slug);
         Predicate contentIdEqualsPr = cb.equal(contents.get("id"), id);
 
-        cq.where(slugEqualPr, contentIdEqualsPr);
+        cq.where(contentIdEqualsPr);
 
         TypedQuery<ContentEntity> q = em.createQuery(cq);
         ContentEntity obj = q.setFirstResult(0)
                 .setMaxResults(1)
                 .getSingleResult();
 
-        // close the instances
+        // content-type criteria query
+        CriteriaQuery<ContentTypeEntity> typecq = cb.createQuery(ContentTypeEntity.class);
+        // content-type root
+        Root<ContentTypeEntity> contentTypeRoot = typecq.from(ContentTypeEntity.class);
+        Predicate typeEqualsSlug = cb.equal(contentTypeRoot.get("slug"), slug);
+
+        typecq.where(typeEqualsSlug);
+
+        TypedQuery<ContentTypeEntity> contentTypeQuery = em.createQuery(typecq);
+        // get the result for content type
+        ContentTypeEntity type = contentTypeQuery.setFirstResult(0)
+                .setMaxResults(1)
+                .getSingleResult();
+
         em.close();
+
+        if (type == null) {
+            throw new NoSuchEntityExistsException("ContentType", "slug", slug);
+        }
+
+        // check if the entity type is the same as the type it's being request
+        if (!obj.getContentType().getSlug().equals(slug)) {
+            String err = "Content type mismatch: the requested type of content was: " + slug
+                    + ", but the content is of type: "
+                    + obj.getContentType().getSlug();
+
+            throw new RuntimeException(err);
+        }
 
         return obj;
     }
