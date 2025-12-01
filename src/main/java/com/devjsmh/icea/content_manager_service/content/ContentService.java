@@ -1,5 +1,6 @@
 package com.devjsmh.icea.content_manager_service.content;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -178,7 +179,27 @@ public class ContentService {
         return content;
     }
 
-    // TODO - create method to update the content entry
-    // TODO - create method to delete content entry
+    /**
+     * Updates a existing content entry
+     * 
+     * @param slug    of the content type
+     * @param id      of the content entry
+     * @param request represent the object with new data
+     * @return the updated content
+     */
+    public ContentEntity updateByTypeAndIdV1(String contentTypeSlug, Long id, ContentEntity request) {
+
+        ContentEntity content = this.getByTypeAndIdV1(contentTypeSlug, id);
+
+        content.setStatus(request.getStatus());
+        content.setData(request.getData());
+        content.setUpdatedAt(LocalDateTime.now());
+
+        if ("published".equals(request.getStatus())) {
+            content.setPublishedAt(LocalDateTime.now());
+        }
+
+        return this.contentRepository.save(content);
+    }
 
 }
