@@ -162,6 +162,10 @@ public class ContentService {
             throw new NoSuchEntityExistsException("ContentTypeEntity", "slug", slug);
         }
 
+        if(content.getContentType() == null){
+            throw new NullPointerException("The content has no type assigned. the value is null");
+        }
+
         // check if the entity type is the same as the type it's being request
         if (!content.getContentType().getSlug().equals(slug)) {
             String err = "Content type mismatch: the requested type of content was: " + slug
