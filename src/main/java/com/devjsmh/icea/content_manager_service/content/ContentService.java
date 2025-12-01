@@ -202,4 +202,17 @@ public class ContentService {
         return this.contentRepository.save(content);
     }
 
+    /**
+     * Deletes specified content by type and content id
+     * 
+     * @param slug of the content type
+     * @param id of the content entry
+     */
+    public void deleteByTypeAndIdV1(String slug, Long id) {
+
+        // check if the content entry exists by getting it from database
+        this.getByTypeAndIdV1(slug, id);
+        // delete the content
+        this.contentRepository.deleteById(id);
+    }
 }

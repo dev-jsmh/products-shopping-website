@@ -3,6 +3,7 @@ package com.devjsmh.icea.content_manager_service.content;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -94,4 +95,9 @@ public class ContentController {
         return ResponseEntity.ok().body(dto);
     }
 
+    @DeleteMapping("/v1/contents/{slug}/{id}")
+    public ResponseEntity<Void> deleteByTypeAndIdV1(@PathVariable("slug") String slug, @PathVariable("id") Long id) {
+        this.contentService.deleteByTypeAndIdV1(slug, id);
+        return ResponseEntity.noContent().build();
+    }
 }
