@@ -116,41 +116,66 @@ public class ContentService {
 
     /**
      * 
-     * Finds a content entry that belongs to a specified type by content id
+     * Finds a content entry by type and by content id
      * 
-     * ex: getbySlug("blog-post", 3928323)
+     * ex: getByTypeAndId("blog-post", 3928323)
      * 
      * @param slug from the content-type
      * @param id   of the content entry
      * @return the found content entry
      */
-    public ContentEntity getBySlugV1(String slug, Long id) {
+    public ContentEntity getByTypeAndIdV1(String slug, Long id) {
 
-        // Todo - handle exection when the param is not provided
-        // what exception can i throw
+        if (slug == null) {
+            throw new IllegalArgumentException("slug must not be null or blank");
+        }
 
+        if (id == null) {
+            throw new IllegalArgumentException("id must not be null");
+        }
+
+        // --------- Fetch ContentEntity -------
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<ContentEntity> cq = cb.createQuery(ContentEntity.class);
         Root<ContentEntity> contents = cq.from(ContentEntity.class);
-
-        // joins
-        Join<ContentEntity, ContentTypeEntity> contentTypejoin = contents.join("contentType", JoinType.INNER);
-
         // add all the predicates and queries needed
-        Predicate slugEqualPr = cb.equal(contentTypejoin.get("slug"), slug);
-        Predicate contentIdEqualsPr = cb.equal(contents.get("id"), id);
-
-        cq.where(slugEqualPr, contentIdEqualsPr);
+        cq.where(cb.equal(contents.get("id"), id));
 
         TypedQuery<ContentEntity> q = em.createQuery(cq);
-        ContentEntity obj = q.setFirstResult(0)
-                .setMaxResults(1)
-                .getSingleResult();
+        List<ContentEntity> contentResults = q.setMaxResults(1).getResultList();
 
-        // close the instances
-        em.close();
+        if (contentResults.isEmpty()) {
+            throw new NoSuchEntityExistsException("ContentEntity", "id", id.toString());
+        }
 
-        return obj;
+        ContentEntity content = contentResults.get(0);
+
+        // --------- Fetch ContentTypeEntity -------
+        CriteriaQuery<ContentTypeEntity> typecq = cb.createQuery(ContentTypeEntity.class);
+        Root<ContentTypeEntity> contentTypeRoot = typecq.from(ContentTypeEntity.class);
+        typecq.where(cb.equal(contentTypeRoot.get("slug"), slug));
+
+        TypedQuery<ContentTypeEntity> typeQuery = em.createQuery(typecq);
+        List<ContentTypeEntity> typeResults = typeQuery.setMaxResults(1).getResultList();
+
+        if (typeResults.isEmpty()) {
+            throw new NoSuchEntityExistsException("ContentTypeEntity", "slug", slug);
+        }
+
+        if(content.getContentType() == null){
+            throw new NullPointerException("The content has no type assigned. the value is null");
+        }
+
+        // check if the entity type is the same as the type it's being request
+        if (!content.getContentType().getSlug().equals(slug)) {
+            String err = "Content type mismatch: the requested type of content was: " + slug
+                    + ", but the found content is of type: "
+                    + content.getContentType().getSlug();
+
+            throw new RuntimeException(err);
+        }
+
+        return content;
     }
 
     // TODO - create method to update the content entry
