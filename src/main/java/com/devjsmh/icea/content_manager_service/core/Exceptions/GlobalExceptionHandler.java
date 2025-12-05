@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
         String requestURL = request.getRequest().getRequestURI();
 
         // add details about the not found entity
-        Map<String, String> details = new HashMap<>();
+        Map<String, Object> details = new HashMap<>();
 
         if (ex.getEntityName() != null)
             details.put("entity", ex.getEntityName());
