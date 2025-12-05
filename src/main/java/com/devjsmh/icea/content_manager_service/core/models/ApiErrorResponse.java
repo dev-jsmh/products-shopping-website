@@ -23,7 +23,7 @@ public class ApiErrorResponse {
     private String error; // Description of the HTTP status eg, "Not Found", "Forbiden".
     private String message; // User friendly error message
     private String path; // The url of the request that generated the error
-    private Map<String, String> details; // Additional error details (optional)
+    private Map<String, Object> details; // Additional error details (optional)
 
     /**
      * Constructor for basic errors
@@ -52,12 +52,12 @@ public class ApiErrorResponse {
      * @param path    The URL that was requested and cause the error
      * @param details A Map with specific details about the exception
      */
-    public ApiErrorResponse(int status, String error, String message, String path, Map<String, String> details) {
+    public ApiErrorResponse(int status, String error, String message, String path, Map<String, Object> details) {
         this(status, error, message, path);
         this.details = details;
     }
 
-    public void setDetails(Map<String, String> details) {
+    public void setDetails(Map<String, Object> details) {
         this.details = details;
     }
 
