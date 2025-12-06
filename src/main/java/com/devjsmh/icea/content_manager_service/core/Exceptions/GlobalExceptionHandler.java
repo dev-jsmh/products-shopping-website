@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
         String requestURL = request.getRequest().getRequestURI();
 
         // add details about the not found entity
-        Map<String, String> details = new HashMap<>();
+        Map<String, Object> details = new HashMap<>();
 
         if (ex.getEntityName() != null)
             details.put("entity", ex.getEntityName());
@@ -109,5 +109,26 @@ public class GlobalExceptionHandler {
                 requestUrl);
 
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ContentFieldSchemaNotValidException.class)
+    public ResponseEntity<ApiErrorResponse> handleIllegalArgumentException(ContentFieldSchemaNotValidException ex,
+            ServletWebRequest request) {
+
+        String requestUrl = request.getRequest().getRequestURI();
+
+        Map<String, Object> details = new HashMap<>();
+
+        details.put("errors", ex.getDetails());
+        details.put("stackTrace", ex.getStackTrace());
+
+        ApiErrorResponse error = new ApiErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                ex.getMessage(),
+                requestUrl,
+                details);
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }
