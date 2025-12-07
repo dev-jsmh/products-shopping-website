@@ -50,11 +50,26 @@ public class ContentFieldSchemaNotValidException extends RuntimeException {
      * 
      * @param message general message
      */
-     public ContentFieldSchemaNotValidException(String message) {
+    public ContentFieldSchemaNotValidException(String message) {
         super(message);
         this.contentId = null;
         this.contentType = null;
         this.errors = null;
+    }
+
+    /**
+     * Creates an exception with a custom message and error details
+     * 
+     * @param message
+     * @param errors
+     */
+    public ContentFieldSchemaNotValidException(String message, Object errors) {
+        super(message);
+        this.errors = errors;
+        this.contentId = null;
+        this.contentType = null;
+
+        logger.warn(message);
     }
 
     public Object getDetails() {
