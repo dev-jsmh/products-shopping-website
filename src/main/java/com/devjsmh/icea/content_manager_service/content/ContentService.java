@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.devjsmh.icea.content_manager_service.contentType.ContentTypeEntity;
 import com.devjsmh.icea.content_manager_service.contentType.IContentTypeRepository;
+import com.devjsmh.icea.content_manager_service.core.Exceptions.ContentFieldSchemaNotValidException;
 import com.devjsmh.icea.content_manager_service.core.Exceptions.NoSuchEntityExistsException;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -111,6 +112,24 @@ public class ContentService {
             throw new RuntimeException("The \"data\" property must be an array of objects");
         }
 
+        JsonNode fields = type.getFields();
+        JsonNode data = request.getData();
+
+        List<String> errors = this.validate(fields, data);
+
+        if (!errors.isEmpty()) {
+
+            StringBuilder stb = new StringBuilder();
+            String st1 = "Cannot create a new content of type:" + type.getName();
+            String st2 = "Invalid content data: ";
+            String st3 = " the data does not meet field schema from the content type";
+            stb.append(st1);
+            stb.append(st2);
+            stb.append(st3);
+
+            throw new ContentFieldSchemaNotValidException(stb.toString(), errors);
+        }
+
         // set the type
         request.setContentType(type);
 
@@ -192,6 +211,18 @@ public class ContentService {
     public ContentEntity updateByTypeAndIdV1(String contentTypeSlug, Long id, ContentEntity request) {
 
         ContentEntity content = this.getByTypeAndIdV1(contentTypeSlug, id);
+
+        ContentTypeEntity type = content.getContentType();
+
+        JsonNode fields = type.getFields();
+        JsonNode data = request.getData();
+
+        List<String> errors = this.validate(fields, data);
+
+        if (!errors.isEmpty()) {
+
+            throw new ContentFieldSchemaNotValidException(id, type.getName(), errors);
+        }
 
         content.setStatus(request.getStatus());
         content.setData(request.getData());
