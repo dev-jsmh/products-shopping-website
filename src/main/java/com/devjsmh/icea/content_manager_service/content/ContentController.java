@@ -100,4 +100,28 @@ public class ContentController {
         this.contentService.deleteByTypeAndIdV1(slug, id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/v1/public/contents/{contentTypeSlug}")
+    public ResponseEntity<List<ContentDetailedDto>> getPublicContentByTypeV1(
+            @PathVariable("contentTypeSlug") String contentTypeSlug) {
+
+        // TODO - the content to be returned here must have the "published" status
+
+        List<ContentEntity> tempEntityList = this.contentService.getAllV1(contentTypeSlug);
+        List<ContentDetailedDto> dtoList = this.contentWithContentTypeMapper.toDtoList(tempEntityList);
+        return ResponseEntity.ok().body(dtoList);
+    }
+
+    @GetMapping("/v1/public/contents/{contentTypeSlug}/{id}")
+    public ResponseEntity<ContentDetailedDto> getPublicContentByTypeAndIdV1(
+            @PathVariable("contentTypeSlug") String contentTypeSlug,
+            @PathVariable("id") Long contentId) {
+
+        // TODO - the content to be returned here must have the "published" status
+
+        ContentEntity entity = this.contentService.getByTypeAndIdV1(contentTypeSlug, contentId);
+        ContentDetailedDto dto = this.contentWithContentTypeMapper.toDto(entity);
+        return ResponseEntity.ok().body(dto);
+    }
+
 }
