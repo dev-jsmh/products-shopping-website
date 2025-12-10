@@ -56,6 +56,7 @@ public class ContentService {
      */
     public List<ContentEntity> getAllV1(String contentTypeSlug) {
 
+        // TODO - filter the content search by status
         // handle null parameters
 
         // -------------------- criteria api ----------------
@@ -147,6 +148,8 @@ public class ContentService {
      * @return the found content entry
      */
     public ContentEntity getByTypeAndIdV1(String slug, Long id) {
+
+        // TODO - filter the content search by status
 
         if (slug == null) {
             throw new IllegalArgumentException("slug must not be null or blank");
