@@ -399,6 +399,41 @@ public class ContentService {
         return result;
     }
 
+    public ContentEntity getPublishedContentByTypeAndId(String contentTypeSlug, Long id) {
+
+        ContentTypeEntity type = this.findContentTypeBySlug(contentTypeSlug)
+                .orElseThrow(() -> new NoSuchEntityExistsException(
+                        "contentType",
+                        "slug",
+                        contentTypeSlug));
+
+        ContentEntity content = this.contentRepository.findById(id)
+                .orElseThrow(() -> new NoSuchEntityExistsException(
+                        "content",
+                        "id",
+                        id.toString()));
+
+        if (content.getContentType() == null) {
+            throw new NullPointerException("The content has no type assigned. the value is null");
+        }
+
+        // check if the entity type is the same as the type it's being request
+        if (!content.getContentType().getSlug().equals(contentTypeSlug)) {
+            String err = "Content type mismatch: the requested type of content was: " + contentTypeSlug
+                    + ", but the found content is of type: "
+                    + content.getContentType().getSlug();
+
+            throw new RuntimeException(err);
+        }
+
+        if (!ContentStatus.PUBLISHED.getValue().equals(content.getStatus())) {
+            throw new RuntimeException("There is no published '" + contentTypeSlug + "' content with id: " + id);
+        }
+
+        // return result
+        return content;
+    }
+
     // ===== REPOSITORY METHODS
     //
     // these are repository methods they must be place in the repository layer
