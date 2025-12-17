@@ -105,9 +105,7 @@ public class ContentController {
     public ResponseEntity<List<ContentDetailedDto>> getPublicContentByTypeV1(
             @PathVariable("contentTypeSlug") String contentTypeSlug) {
 
-        // TODO - the content to be returned here must have the "published" status
-
-        List<ContentEntity> tempEntityList = this.contentService.getAllV1(contentTypeSlug);
+        List<ContentEntity> tempEntityList = this.contentService.getAllPublishedContentByType(contentTypeSlug);
         List<ContentDetailedDto> dtoList = this.contentWithContentTypeMapper.toDtoList(tempEntityList);
         return ResponseEntity.ok().body(dtoList);
     }

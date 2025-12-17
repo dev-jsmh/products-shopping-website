@@ -386,6 +386,19 @@ public class ContentService {
         return value;
     }
 
+    public List<ContentEntity> getAllPublishedContentByType(String contentTypeSlug) {
+
+        ContentTypeEntity type = this.findContentTypeBySlug(contentTypeSlug)
+                .orElseThrow(() -> new NoSuchEntityExistsException(
+                        "contentType",
+                        "slug",
+                        contentTypeSlug));
+
+        String status = ContentStatus.PUBLISHED.getValue();
+        List<ContentEntity> result = this.findAllByTypeAndStatus(contentTypeSlug, status);
+        return result;
+    }
+
     // ===== REPOSITORY METHODS
     //
     // these are repository methods they must be place in the repository layer
