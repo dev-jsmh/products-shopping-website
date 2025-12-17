@@ -105,9 +105,7 @@ public class ContentController {
     public ResponseEntity<List<ContentDetailedDto>> getPublicContentByTypeV1(
             @PathVariable("contentTypeSlug") String contentTypeSlug) {
 
-        // TODO - the content to be returned here must have the "published" status
-
-        List<ContentEntity> tempEntityList = this.contentService.getAllV1(contentTypeSlug);
+        List<ContentEntity> tempEntityList = this.contentService.getAllPublishedContentByType(contentTypeSlug);
         List<ContentDetailedDto> dtoList = this.contentWithContentTypeMapper.toDtoList(tempEntityList);
         return ResponseEntity.ok().body(dtoList);
     }
@@ -117,9 +115,7 @@ public class ContentController {
             @PathVariable("contentTypeSlug") String contentTypeSlug,
             @PathVariable("id") Long contentId) {
 
-        // TODO - the content to be returned here must have the "published" status
-
-        ContentEntity entity = this.contentService.getByTypeAndIdV1(contentTypeSlug, contentId);
+        ContentEntity entity = this.contentService.getPublishedContentByTypeAndId(contentTypeSlug, contentId);
         ContentDetailedDto dto = this.contentWithContentTypeMapper.toDto(entity);
         return ResponseEntity.ok().body(dto);
     }
