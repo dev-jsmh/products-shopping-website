@@ -3,6 +3,7 @@ package com.devjsmh.icea.content_manager_service.content;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -187,7 +188,7 @@ public class ContentService {
             throw new NoSuchEntityExistsException("ContentTypeEntity", "slug", slug);
         }
 
-        if(content.getContentType() == null){
+        if (content.getContentType() == null) {
             throw new NullPointerException("The content has no type assigned. the value is null");
         }
 
@@ -242,7 +243,7 @@ public class ContentService {
      * Deletes specified content by type and content id
      * 
      * @param slug of the content type
-     * @param id of the content entry
+     * @param id   of the content entry
      */
     public void deleteByTypeAndIdV1(String slug, Long id) {
 
@@ -384,4 +385,148 @@ public class ContentService {
 
         return value;
     }
+
+    // ===== REPOSITORY METHODS
+    //
+    // these are repository methods they must be place in the repository layer
+
+    /**
+     * Return the total count of contents using their type and status properties
+     * 
+     * @param contentTypeSlug
+     * @param status
+     * @return count of found elements
+     */
+    public long countByTypeAndStatus(String contentTypeSlug, String status) {
+
+        // ---- fetch total count ----
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        Root<ContentEntity> countRoot = countQuery.from(ContentEntity.class);
+
+        Join<ContentEntity, ContentTypeEntity> countJoin = countRoot.join("contentType", JoinType.INNER);
+
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        // add predicates
+        predicates.add(cb.equal(countJoin.get("slug"), contentTypeSlug));
+        predicates.add(cb.equal(countRoot.get("status"), status));
+        // apply conditionas
+        countQuery.select(cb.count(countRoot)).where(predicates.toArray(new Predicate[0]));
+        // execute the query
+        Long totalCount = em.createQuery(countQuery).getSingleResult();
+
+        return totalCount;
+    }
+
+    /**
+     * Returns the total count of contents based on their type
+     * 
+     * @param contentTypeSlug
+     * @return count of found elements
+     */
+    public long countByType(String contentTypeSlug) {
+
+        // ---- fetch total count ----
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        Root<ContentEntity> countRoot = countQuery.from(ContentEntity.class);
+
+        Join<ContentEntity, ContentTypeEntity> countJoin = countRoot.join("contentType", JoinType.INNER);
+
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        // add predicates
+        predicates.add(cb.equal(countJoin.get("slug"), contentTypeSlug));
+        // apply conditionas
+        countQuery.select(cb.count(countRoot)).where(predicates.toArray(new Predicate[0]));
+        // execute the query
+        Long totalCount = em.createQuery(countQuery).getSingleResult();
+
+        return totalCount;
+    }
+
+    public Optional<ContentEntity> findByIdAndType(Long id, String contentTypeSlug) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ContentEntity> cq = cb.createQuery(ContentEntity.class);
+        Root<ContentEntity> root = cq.from(ContentEntity.class);
+        // join with the contentType entities
+        Join<ContentEntity, ContentTypeEntity> contentTypeJoin = root.join("contentType", JoinType.INNER);
+        // add all the predicates and queries needed
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(cb.equal(root.get("id"), id));
+        predicates.add(cb.equal(contentTypeJoin.get("slug"), contentTypeSlug));
+
+        cq.where(predicates.toArray(new Predicate[0]));
+
+        TypedQuery<ContentEntity> query = em.createQuery(cq);
+        List<ContentEntity> contentResults = query.setMaxResults(1).getResultList();
+
+        if (contentResults.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(contentResults.get(0));
+    }
+
+    public List<ContentEntity> findAllByTypeAndStatus(String contentTypeSlug, String status) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ContentEntity> cq = cb.createQuery(ContentEntity.class);
+        Root<ContentEntity> root = cq.from(ContentEntity.class);
+        // join with the contentType entities
+        Join<ContentEntity, ContentTypeEntity> contentTypeJoin = root.join("contentType", JoinType.INNER);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(cb.equal(root.get("status"), status));
+        predicates.add(cb.equal(contentTypeJoin.get("slug"), contentTypeSlug));
+
+        cq.where(predicates.toArray(new Predicate[0]));
+
+        TypedQuery<ContentEntity> query = em.createQuery(cq);
+
+        List<ContentEntity> result = query.getResultList();
+
+        return result;
+    }
+
+    public List<ContentEntity> findAllByType(String contentTypeSlug) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ContentEntity> cq = cb.createQuery(ContentEntity.class);
+        Root<ContentEntity> root = cq.from(ContentEntity.class);
+        Join<ContentEntity, ContentTypeEntity> contentTypejoin = root.join("contentType", JoinType.INNER);
+        // add all the predicates and queries needed
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(cb.equal(contentTypejoin.get("slug"), contentTypeSlug));
+
+        cq.where(predicates.toArray(new Predicate[0]));
+
+        TypedQuery<ContentEntity> query = em.createQuery(cq);
+        List<ContentEntity> result = query.getResultList();
+
+        return result;
+    }
+
+    public Optional<ContentTypeEntity> findContentTypeBySlug(String contentTypeSlug) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ContentTypeEntity> typecq = cb.createQuery(ContentTypeEntity.class);
+        Root<ContentTypeEntity> contentTypeRoot = typecq.from(ContentTypeEntity.class);
+
+        typecq.where(cb.equal(contentTypeRoot.get("slug"), contentTypeSlug));
+
+        TypedQuery<ContentTypeEntity> typeQuery = em.createQuery(typecq);
+        List<ContentTypeEntity> typeResults = typeQuery
+                .setMaxResults(1)
+                .getResultList();
+
+        if (typeResults.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(typeResults.get(0));
+    }
+
 }
