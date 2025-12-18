@@ -5,8 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 
+import com.devjsmh.icea.content_manager_service.content.dtos.ContentDetailedDto;
+import com.devjsmh.icea.content_manager_service.content.mappers.IContentWithContentTypeSummaryMapper;
 import com.devjsmh.icea.content_manager_service.contentType.ContentTypeEntity;
 import com.devjsmh.icea.content_manager_service.contentType.IContentTypeRepository;
 import com.devjsmh.icea.content_manager_service.core.Exceptions.ContentFieldSchemaNotValidException;
@@ -35,6 +42,7 @@ public class ContentService {
 
     private final IContentRepository contentRepository;
     private final IContentTypeRepository contentTypeRepository;
+    private final IContentWithContentTypeSummaryMapper contentWithContentTypeMapper;
 
     @PersistenceContext
     private EntityManager em;
@@ -44,9 +52,10 @@ public class ContentService {
      * 
      * @param contentRepository
      */
-    public ContentService(IContentRepository contentRepository, IContentTypeRepository contentTypeRepository) {
+    public ContentService(IContentRepository contentRepository, IContentTypeRepository contentTypeRepository, IContentWithContentTypeSummaryMapper contentWithContentTypeMapper) {
         this.contentRepository = contentRepository;
         this.contentTypeRepository = contentTypeRepository;
+        this.contentWithContentTypeMapper = contentWithContentTypeMapper;
     }
 
     /**
@@ -56,11 +65,6 @@ public class ContentService {
      * @version 1
      */
     public List<ContentEntity> getAllV1(String contentTypeSlug) {
-
-        // TODO - filter the content search by status
-        // handle null parameters
-
-        // -------------------- criteria api ----------------
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<ContentEntity> cq = cb.createQuery(ContentEntity.class);
@@ -434,6 +438,52 @@ public class ContentService {
         return content;
     }
 
+    /**
+     * Finds all the content by type and status and return a paginated
+     * results
+     * 
+     * @param contentTypeSlug
+     * @param page
+     * @param size
+     * @param status ex: "draft" or "published"
+     * @return paginated result of found content entries
+     */
+    public Page<ContentDetailedDto> filterPaginatedContent(String contentTypeSlug, Integer page, Integer size,
+            String status) {
+
+        if (contentTypeSlug == null) {
+            throw new IllegalArgumentException("The 'slug' from the content type must not be null");
+        }
+
+        Optional<ContentTypeEntity> type = this.findContentTypeBySlug(contentTypeSlug);
+
+        if (type.isEmpty()) {
+            throw new NoSuchEntityExistsException("ContentType", "slug", contentTypeSlug);
+        }
+
+        if (page == null) {
+            page = 0;
+        }
+
+        if (size == null) {
+            size = 10;
+        }
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        if (status != null) {
+
+            Page<ContentEntity> pagedResult = this.findAllByTypeAndStatus(contentTypeSlug, pageRequest, status);
+            List<ContentDetailedDto> dtoList = this.contentWithContentTypeMapper.toDtoList(pagedResult.getContent());
+            return new PageImpl<>(dtoList, pageRequest, pagedResult.getTotalElements());
+        }
+
+        // by default the content will only be paginated
+        Page<ContentEntity> pagedResult = this.findAllByType(contentTypeSlug, pageRequest);
+        List<ContentDetailedDto> dtoList = this.contentWithContentTypeMapper.toDtoList(pagedResult.getContent());
+        return new PageImpl<>(dtoList, pageRequest, pagedResult.getTotalElements());
+    }
+
     // ===== REPOSITORY METHODS
     //
     // these are repository methods they must be place in the repository layer
@@ -539,6 +589,33 @@ public class ContentService {
         return result;
     }
 
+    public Page<ContentEntity> findAllByTypeAndStatus(String contentTypeSlug, Pageable pageable, String status) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ContentEntity> cq = cb.createQuery(ContentEntity.class);
+        Root<ContentEntity> root = cq.from(ContentEntity.class);
+        // join with the contentType entities
+        Join<ContentEntity, ContentTypeEntity> contentTypeJoin = root.join("contentType", JoinType.INNER);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(cb.equal(contentTypeJoin.get("slug"), contentTypeSlug));
+        predicates.add(cb.equal(root.get("status"), status));
+
+        cq.where(predicates.toArray(new Predicate[0]));
+
+        TypedQuery<ContentEntity> query = em.createQuery(cq);
+
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
+
+        List<ContentEntity> result = query.getResultList();
+
+        Long totalCount = this.countByTypeAndStatus(contentTypeSlug, status);
+
+        return new PageImpl<>(result, pageable, totalCount);
+    }
+
     public List<ContentEntity> findAllByType(String contentTypeSlug) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -556,6 +633,32 @@ public class ContentService {
         List<ContentEntity> result = query.getResultList();
 
         return result;
+    }
+
+    public Page<ContentEntity> findAllByType(String contentTypeSlug, Pageable pageable) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ContentEntity> cq = cb.createQuery(ContentEntity.class);
+        Root<ContentEntity> root = cq.from(ContentEntity.class);
+        // join with the contentType entities
+        Join<ContentEntity, ContentTypeEntity> contentTypeJoin = root.join("contentType", JoinType.INNER);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(cb.equal(contentTypeJoin.get("slug"), contentTypeSlug));
+
+        cq.where(predicates.toArray(new Predicate[0]));
+
+        TypedQuery<ContentEntity> query = em.createQuery(cq);
+
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
+
+        List<ContentEntity> result = query.getResultList();
+
+        Long totalCount = this.countByType(contentTypeSlug);
+
+        return new PageImpl<>(result, pageable, totalCount);
     }
 
     public Optional<ContentTypeEntity> findContentTypeBySlug(String contentTypeSlug) {

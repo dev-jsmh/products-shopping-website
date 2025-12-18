@@ -2,6 +2,8 @@ package com.devjsmh.icea.content_manager_service.content;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devjsmh.icea.content_manager_service.content.dtos.ContentDetailedDto;
@@ -118,6 +121,18 @@ public class ContentController {
         ContentEntity entity = this.contentService.getPublishedContentByTypeAndId(contentTypeSlug, contentId);
         ContentDetailedDto dto = this.contentWithContentTypeMapper.toDto(entity);
         return ResponseEntity.ok().body(dto);
+    }
+
+    @GetMapping("/v2/contents/{contentTypeSlug}")
+    public ResponseEntity<PagedModel<ContentDetailedDto>> getAllByTypeAndStatusPaginated(
+            @PathVariable("contentTypeSlug") String contentTypeSlug,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
+            @RequestParam(value = "status", required = false) String status){
+
+           Page<ContentDetailedDto>  result = this.contentService.filterPaginatedContent(contentTypeSlug, page, size, status);
+           PagedModel<ContentDetailedDto> p = new PagedModel<>(result);
+           return ResponseEntity.ok().body(p);
     }
 
 }
