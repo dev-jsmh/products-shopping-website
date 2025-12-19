@@ -250,11 +250,14 @@ public class ContentService {
 
         String status = request.getStatus();
 
-        if (!ContentStatus.exists(status)) {
-            throw new RuntimeException("Content status: '" + status + "' not supported");
+        if (status != null) {
+            if (!ContentStatus.exists(status)) {
+                throw new RuntimeException("Content status: '" + status + "' not supported");
+            }
+
+            content.setStatus(status);
         }
 
-        content.setStatus(status);
         content.setData(request.getData());
         content.setUpdatedAt(LocalDateTime.now());
 
