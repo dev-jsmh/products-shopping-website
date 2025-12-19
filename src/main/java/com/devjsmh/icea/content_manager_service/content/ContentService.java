@@ -138,6 +138,22 @@ public class ContentService {
 
         // set the type
         request.setContentType(type);
+        request.setCreatedAt(LocalDateTime.now());
+
+        String status = request.getStatus();
+
+        if (status == null || status.isEmpty()) {
+            status = ContentStatus.DRAFT.getValue();
+            request.setStatus(status);
+        }
+
+        if (!ContentStatus.exists(status)) {
+            throw new RuntimeException("Content status: '" + status + "' not supported");
+        }
+
+        if (status.equals(ContentStatus.PUBLISHED.getValue())) {
+            request.setPublishedAt(LocalDateTime.now());
+        }
 
         return this.contentRepository.save(request);
     }
@@ -232,11 +248,20 @@ public class ContentService {
             throw new ContentFieldSchemaNotValidException(id, type.getName(), errors);
         }
 
-        content.setStatus(request.getStatus());
+        String status = request.getStatus();
+
+        if (status != null) {
+            if (!ContentStatus.exists(status)) {
+                throw new RuntimeException("Content status: '" + status + "' not supported");
+            }
+
+            content.setStatus(status);
+        }
+
         content.setData(request.getData());
         content.setUpdatedAt(LocalDateTime.now());
 
-        if ("published".equals(request.getStatus())) {
+        if (status.equals(ContentStatus.PUBLISHED.getValue())) {
             content.setPublishedAt(LocalDateTime.now());
         }
 
