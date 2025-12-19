@@ -138,6 +138,22 @@ public class ContentService {
 
         // set the type
         request.setContentType(type);
+        request.setCreatedAt(LocalDateTime.now());
+
+        String status = request.getStatus();
+
+        if (status == null || status.isEmpty()) {
+            status = ContentStatus.DRAFT.getValue();
+            request.setStatus(status);
+        }
+
+        if (!ContentStatus.exists(status)) {
+            throw new RuntimeException("Content status: '" + status + "' not supported");
+        }
+
+        if (status.equals(ContentStatus.PUBLISHED.getValue())) {
+            request.setPublishedAt(LocalDateTime.now());
+        }
 
         return this.contentRepository.save(request);
     }
