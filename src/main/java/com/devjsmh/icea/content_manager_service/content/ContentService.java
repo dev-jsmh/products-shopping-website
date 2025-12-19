@@ -248,11 +248,17 @@ public class ContentService {
             throw new ContentFieldSchemaNotValidException(id, type.getName(), errors);
         }
 
-        content.setStatus(request.getStatus());
+        String status = request.getStatus();
+
+        if (!ContentStatus.exists(status)) {
+            throw new RuntimeException("Content status: '" + status + "' not supported");
+        }
+
+        content.setStatus(status);
         content.setData(request.getData());
         content.setUpdatedAt(LocalDateTime.now());
 
-        if ("published".equals(request.getStatus())) {
+        if (status.equals(ContentStatus.PUBLISHED.getValue())) {
             content.setPublishedAt(LocalDateTime.now());
         }
 
