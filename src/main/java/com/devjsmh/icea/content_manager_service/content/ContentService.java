@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.devjsmh.icea.content_manager_service.content.dtos.ContentDetailedDto;
 import com.devjsmh.icea.content_manager_service.content.mappers.IContentWithContentTypeSummaryMapper;
+import com.devjsmh.icea.content_manager_service.content.services.ContentValidationService;
 import com.devjsmh.icea.content_manager_service.contentType.ContentTypeEntity;
 import com.devjsmh.icea.content_manager_service.contentType.IContentTypeRepository;
 import com.devjsmh.icea.content_manager_service.core.Exceptions.ContentFieldSchemaNotValidException;
@@ -43,6 +44,7 @@ public class ContentService {
     private final IContentRepository contentRepository;
     private final IContentTypeRepository contentTypeRepository;
     private final IContentWithContentTypeSummaryMapper contentWithContentTypeMapper;
+    private final ContentValidationService contentValidator;
 
     @PersistenceContext
     private EntityManager em;
@@ -52,10 +54,15 @@ public class ContentService {
      * 
      * @param contentRepository
      */
-    public ContentService(IContentRepository contentRepository, IContentTypeRepository contentTypeRepository, IContentWithContentTypeSummaryMapper contentWithContentTypeMapper) {
+    public ContentService(
+            IContentRepository contentRepository,
+            IContentTypeRepository contentTypeRepository,
+            IContentWithContentTypeSummaryMapper contentWithContentTypeMapper,
+            ContentValidationService contentValidator) {
         this.contentRepository = contentRepository;
         this.contentTypeRepository = contentTypeRepository;
         this.contentWithContentTypeMapper = contentWithContentTypeMapper;
+        this.contentValidator = contentValidator;
     }
 
     /**
@@ -121,7 +128,7 @@ public class ContentService {
         JsonNode fields = type.getFields();
         JsonNode data = request.getData();
 
-        List<String> errors = this.validate(fields, data);
+        List<String> errors = this.contentValidator.validate(fields, data);
 
         if (!errors.isEmpty()) {
 
@@ -241,7 +248,7 @@ public class ContentService {
         JsonNode fields = type.getFields();
         JsonNode data = request.getData();
 
-        List<String> errors = this.validate(fields, data);
+        List<String> errors = this.contentValidator.validate(fields, data);
 
         if (!errors.isEmpty()) {
 
