@@ -1,12 +1,13 @@
 package com.devjsmh.icea.content_manager_service.contentType;
 
+import java.util.List;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.devjsmh.icea.content_manager_service.content.services.ContentTypeField;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,10 +32,9 @@ public class ContentTypeEntity {
     private String description;
 
     // this property is a json object
-    @Convert(converter = JsonAttributeMapper.class)
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "json")
-    private JsonNode fields;
+    private List<ContentTypeField> fields;
 
     // class constructor
     public ContentTypeEntity() {
@@ -73,11 +73,11 @@ public class ContentTypeEntity {
         this.description = description;
     }
 
-    public JsonNode getFields() {
+    public List<ContentTypeField> getFields() {
         return fields;
     }
 
-    public void setFields(JsonNode fields) {
+    public void setFields(List<ContentTypeField> fields) {
         this.fields = fields;
     }
 

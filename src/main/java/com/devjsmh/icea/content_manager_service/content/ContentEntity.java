@@ -1,16 +1,15 @@
 package com.devjsmh.icea.content_manager_service.content;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import com.devjsmh.icea.content_manager_service.contentType.ContentTypeEntity;
-import com.devjsmh.icea.content_manager_service.contentType.JsonAttributeMapper;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -51,10 +50,9 @@ public class ContentEntity {
     private LocalDateTime publishedAt;
 
     // this property is a json object
-    @Convert(converter = JsonAttributeMapper.class)
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "json")
-    private JsonNode data;
+    private List<Map<String, Object>> data;
 
     public ContentEntity() {
     }
@@ -107,11 +105,11 @@ public class ContentEntity {
         this.publishedAt = publishedAt;
     }
 
-    public JsonNode getData() {
+    public List<Map<String, Object>> getData() {
         return data;
     }
 
-    public void setData(JsonNode data) {
+    public void setData(List<Map<String, Object>> data) {
         this.data = data;
     }
 
