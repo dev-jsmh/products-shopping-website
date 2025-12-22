@@ -1,12 +1,15 @@
 package com.devjsmh.icea.content_manager_service.content.services;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.devjsmh.icea.content_manager_service.content.services.validation.FieldValidator;
+import com.devjsmh.icea.content_manager_service.content.services.validation.FieldValidatorRegistry;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 
@@ -15,7 +18,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 @Service
 public class ContentValidationService {
 
-    public List<String> validate(JsonNode fieldSchema, JsonNode data) {
+    private final FieldValidatorRegistry validatorsRegistry;
+
+    public ContentValidationService(FieldValidatorRegistry validatorsRegistry) {
+        this.validatorsRegistry = validatorsRegistry;
+    }
+
+    public List<String> validate(List<ContentTypeField> fieldSchema, List<Map<String, Object>> contentBlocks) {
 
         List<String> errors = new ArrayList<>();
 
@@ -24,13 +33,8 @@ public class ContentValidationService {
             errors.add(err);
         }
 
-        if (!fieldSchema.isArray()) {
-            String err = "Content type schema is invalid: Fields must be an array";
-            errors.add(err);
-        }
-
-        for (JsonNode fieldDefinition : fieldSchema) {
-            String err = this.validateField(fieldDefinition, data);
+        for (ContentTypeField fieldDefinition : fieldSchema) {
+            String err = this.validateField(fieldDefinition, contentBlocks);
             if (err != null) {
                 errors.add(err);
             }
@@ -39,14 +43,16 @@ public class ContentValidationService {
         return errors;
     }
 
-    public String validateField(JsonNode fieldDefinition, JsonNode data) {
+    public String validateField(ContentTypeField fieldDefinition, List<Map<String, Object>> contentBlocks) {
 
-        String fieldName = fieldDefinition.get("name").asText();
-        String fieldType = fieldDefinition.get("type").asText();
-        boolean isRequired = fieldDefinition.get("required").asBoolean(false);
+        String fieldName = fieldDefinition.getName();
+        String fieldType = fieldDefinition.getType();
+        boolean isRequired = fieldDefinition.isRequired();
 
         // get from content data
-        JsonNode value = this.getFieldByName(fieldName, data);
+        Object block = this.getFieldByName(fieldName, contentBlocks);
+
+        JsonNode value = this.toJson(block);
 
         // -------- REQUIRED CHECK ----------
         if (isRequired && (value == null || value.isNull())) {
@@ -57,95 +63,34 @@ public class ContentValidationService {
             return "Missing field: " + fieldName;
         }
 
-        // ------- TYPE CHECK ------
-        switch (fieldType) {
-            case "string":
-                if (!value.isTextual()) {
-                    return "Field '" + fieldName + "' must be a string";
-                }
-
-                break;
-
-            case "text":
-                if (!value.isTextual()) {
-                    return "Field '" + fieldName + "' must be a text";
-                }
-
-                break;
-
-            case "richtext":
-                if (!value.isTextual()) {
-                    return "Field '" + fieldName + "' must be a richtext";
-                }
-
-                break;
-
-            case "datetime":
-                if (!value.isTextual()) {
-                    return "Field '" + fieldName + "' must be a datetime";
-
-                }
-                return validateDateTimeField(fieldName, value.asText());
-
-            case "media":
-                return validateMediaField(fieldName, value);
-
-            default:
-                return "Unsupported fiel type: " + fieldType + " for field: " + fieldName;
-        }
-
-        return null;
+        FieldValidator validator = validatorsRegistry.get(fieldType);
+        return validator.validate(fieldName, value);
 
     }
 
-    public String validateDateTimeField(String fieldName, String text) {
-        try {
-            LocalDateTime.parse(text);
-        } catch (Exception e) {
-            return "Field '" + fieldName + "' must be a valid ISO datetime";
-        }
+    public Object getFieldByName(String name, List<Map<String, Object>> contentArray) {
 
-        return null;
-    }
+        Object obj = null;
 
-    public String validateMediaField(String fieldName, JsonNode value) {
+        for (Map<String, Object> contentField : contentArray) {
 
-        if (!value.isObject()) {
-            return "Field '" + fieldName + "' must be an object";
-        }
-
-        if (!value.has("id")) {
-            return "Field '" + fieldName + "' must contain a propery 'id'";
-        }
-
-        if (value.get("id") != null && !value.get("id").isTextual()) {
-            return "Field '" + fieldName + "' must contain a valid id string";
-        }
-
-        if (!value.has("url")) {
-            return "Field '" + fieldName + "' must contain a property 'url'";
-        }
-
-        if (value.get("url") != null && !value.get("url").isTextual()) {
-            return "Field '" + fieldName + "' must contain a valid 'url' string";
-        }
-
-        return null;
-    }
-
-    public JsonNode getFieldByName(String name, JsonNode contentArray) {
-
-        JsonNode value = null;
-
-        for (JsonNode contentField : contentArray) {
-
-            if (contentField.has(name)) {
-                value = contentField.get(name);
+            if (contentField.containsKey(name)) {
+                obj = contentField.get(name);
                 break;
             }
         }
 
-        return value;
+        return obj;
+    }
+
+    public JsonNode toJson(Object obj) {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(obj, JsonNode.class);
+    }
+
+    public Object toObj(JsonNode json) {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(json, Object.class);
     }
 
 }
