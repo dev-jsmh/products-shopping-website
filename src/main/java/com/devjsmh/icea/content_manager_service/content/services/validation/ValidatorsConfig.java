@@ -2,6 +2,8 @@ package com.devjsmh.icea.content_manager_service.content.services.validation;
 
 import org.springframework.context.annotation.Configuration;
 
+import com.devjsmh.icea.content_manager_service.content.services.validation.types.TextFieldValidator;
+
 import jakarta.annotation.PostConstruct;
 
 /**
@@ -13,14 +15,18 @@ import jakarta.annotation.PostConstruct;
 public class ValidatorsConfig {
 
     private final FieldValidatorRegistry registry;
+    private final TextFieldValidator textFieldValidator;
 
-    public ValidatorsConfig(FieldValidatorRegistry registry) {
+    public ValidatorsConfig(
+            FieldValidatorRegistry registry,
+            TextFieldValidator textFieldValidator) {
         this.registry = registry;
+        this.textFieldValidator = textFieldValidator;
     }
 
     @PostConstruct
     public void registerValidators() {
-       
+        registry.add("text", textFieldValidator);
     }
 
 }
