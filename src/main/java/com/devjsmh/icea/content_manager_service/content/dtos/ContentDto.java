@@ -1,7 +1,9 @@
 package com.devjsmh.icea.content_manager_service.content.dtos;
 
+import java.util.List;
+import java.util.Map;
+
 import com.devjsmh.icea.content_manager_service.contentType.dtos.ContentTypeDto;
-import com.fasterxml.jackson.databind.JsonNode;
 
 public class ContentDto {
 
@@ -11,7 +13,7 @@ public class ContentDto {
     private String createdAt;
     private String updatedAt;
     private String publishedAt;
-    private JsonNode data;
+    private List<Map<String, Object>> data;
 
     public Long getId() {
         return id;
@@ -61,11 +63,11 @@ public class ContentDto {
         this.publishedAt = publishedAt;
     }
 
-    public JsonNode getData() {
+    public List<Map<String, Object>> getData() {
         return data;
     }
 
-    public void setData(JsonNode data) {
+    public void setData(List<Map<String, Object>> data) {
         this.data = data;
     }
 

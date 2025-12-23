@@ -3,6 +3,7 @@ package com.devjsmh.icea.content_manager_service.content;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,12 +15,12 @@ import org.springframework.stereotype.Service;
 
 import com.devjsmh.icea.content_manager_service.content.dtos.ContentDetailedDto;
 import com.devjsmh.icea.content_manager_service.content.mappers.IContentWithContentTypeSummaryMapper;
+import com.devjsmh.icea.content_manager_service.content.services.ContentTypeField;
 import com.devjsmh.icea.content_manager_service.content.services.ContentValidationService;
 import com.devjsmh.icea.content_manager_service.contentType.ContentTypeEntity;
 import com.devjsmh.icea.content_manager_service.contentType.IContentTypeRepository;
 import com.devjsmh.icea.content_manager_service.core.Exceptions.ContentFieldSchemaNotValidException;
 import com.devjsmh.icea.content_manager_service.core.Exceptions.NoSuchEntityExistsException;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -121,12 +122,8 @@ public class ContentService {
             throw new RuntimeException("The \"data\" property is required");
         }
 
-        if (request.getData().isArray() != true) {
-            throw new RuntimeException("The \"data\" property must be an array of objects");
-        }
-
-        JsonNode fields = type.getFields();
-        JsonNode data = request.getData();
+        List<ContentTypeField> fields = type.getFields();
+        List<Map<String, Object>> data = request.getData();
 
         List<String> errors = this.contentValidator.validate(fields, data);
 
@@ -245,8 +242,8 @@ public class ContentService {
 
         ContentTypeEntity type = content.getContentType();
 
-        JsonNode fields = type.getFields();
-        JsonNode data = request.getData();
+        List<ContentTypeField> fields = type.getFields();
+        List<Map<String, Object>> data = request.getData();
 
         List<String> errors = this.contentValidator.validate(fields, data);
 

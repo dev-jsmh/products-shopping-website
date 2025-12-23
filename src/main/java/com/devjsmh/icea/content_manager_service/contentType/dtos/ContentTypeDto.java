@@ -1,6 +1,9 @@
 package com.devjsmh.icea.content_manager_service.contentType.dtos;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import java.util.List;
+
+import com.devjsmh.icea.content_manager_service.content.services.ContentTypeField;
+
 
 public class ContentTypeDto {
 
@@ -8,7 +11,7 @@ public class ContentTypeDto {
     private String name;
     private String slug;
     private String description;
-    private JsonNode fields;
+    private List<ContentTypeField> fields;
 
     public Long getId() {
         return id;
@@ -42,11 +45,11 @@ public class ContentTypeDto {
         this.description = description;
     }
 
-    public JsonNode getFields() {
+    public List<ContentTypeField> getFields() {
         return fields;
     }
 
-    public void setFields(JsonNode fields) {
+    public void setFields(List<ContentTypeField> fields) {
         this.fields = fields;
     }
 
