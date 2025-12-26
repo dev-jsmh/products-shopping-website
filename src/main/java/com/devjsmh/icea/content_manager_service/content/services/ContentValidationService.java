@@ -52,16 +52,16 @@ public class ContentValidationService {
         // get from content data
         Object block = this.getFieldByName(fieldName, contentBlocks);
 
-        JsonNode value = this.toJson(block);
-
         // -------- REQUIRED CHECK ----------
-        if (isRequired && (value == null || value.isNull())) {
+        if (isRequired && (block == null)) {
             return "Missing required field: " + fieldName;
         }
 
-        if (value == null || value.isNull()) {
+        if (block == null) {
             return "Missing field: " + fieldName;
         }
+
+        JsonNode value = this.toJson(block);
 
         FieldValidator validator = validatorsRegistry.get(fieldType);
         return validator.validate(fieldName, value);
