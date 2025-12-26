@@ -24,7 +24,7 @@ public class ContentValidationService {
         this.validatorsRegistry = validatorsRegistry;
     }
 
-    public List<String> validate(List<ContentTypeField> fieldSchema, List<Map<String, Object>> contentBlocks) {
+    public List<String> validate(JsonNode fieldSchema, List<Map<String, Object>> contentBlocks) {
 
         List<String> errors = new ArrayList<>();
 
@@ -33,7 +33,7 @@ public class ContentValidationService {
             errors.add(err);
         }
 
-        for (ContentTypeField fieldDefinition : fieldSchema) {
+        for (JsonNode fieldDefinition : fieldSchema) {
             String err = this.validateField(fieldDefinition, contentBlocks);
             if (err != null) {
                 errors.add(err);
@@ -43,11 +43,11 @@ public class ContentValidationService {
         return errors;
     }
 
-    public String validateField(ContentTypeField fieldDefinition, List<Map<String, Object>> contentBlocks) {
+    public String validateField(JsonNode fieldDefinition, List<Map<String, Object>> contentBlocks) {
 
-        String fieldName = fieldDefinition.getName();
-        String fieldType = fieldDefinition.getType();
-        boolean isRequired = fieldDefinition.isRequired();
+        String fieldName = fieldDefinition.get("name").asText();
+        String fieldType = fieldDefinition.get("type").asText();
+        boolean isRequired = fieldDefinition.get("required").asBoolean();
 
         // get from content data
         Object block = this.getFieldByName(fieldName, contentBlocks);
