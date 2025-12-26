@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.devjsmh.icea.content_manager_service.content.services.validation.ContentTypeFieldRegistry;
 import com.devjsmh.icea.content_manager_service.content.services.validation.FieldValidator;
-import com.devjsmh.icea.content_manager_service.content.services.validation.FieldValidatorRegistry;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,9 +18,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class ContentValidationService {
 
-    private final FieldValidatorRegistry validatorsRegistry;
+    private final ContentTypeFieldRegistry validatorsRegistry;
 
-    public ContentValidationService(FieldValidatorRegistry validatorsRegistry) {
+    public ContentValidationService(ContentTypeFieldRegistry validatorsRegistry) {
         this.validatorsRegistry = validatorsRegistry;
     }
 
