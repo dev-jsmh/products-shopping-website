@@ -6,7 +6,7 @@ import com.devjsmh.icea.content_manager_service.content.services.validation.Fiel
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Component
-public class TextFieldValidator implements FieldValidator {
+public class TextField implements FieldValidator {
 
     @Override
     public String validate(String fieldName, JsonNode value) {
@@ -15,7 +15,7 @@ public class TextFieldValidator implements FieldValidator {
             return "Field '" + fieldName + "' must be a text";
 
         }
-        
+
         return null;
     }
 

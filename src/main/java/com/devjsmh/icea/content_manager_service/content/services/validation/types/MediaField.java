@@ -6,10 +6,10 @@ import com.devjsmh.icea.content_manager_service.content.services.validation.Fiel
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Component
-public class MediaFieldValidator implements FieldValidator {
+public class MediaField implements FieldValidator{
 
     @Override
-    public String validate(String fieldName, JsonNode value) {
+    public String validate(String fieldName, JsonNode value){
 
         if (value.isEmpty()) {
             return "Field '" + fieldName + "' must not be null";

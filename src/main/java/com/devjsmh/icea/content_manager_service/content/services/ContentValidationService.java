@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.devjsmh.icea.content_manager_service.content.services.validation.ContentTypeFieldRegistry;
 import com.devjsmh.icea.content_manager_service.content.services.validation.FieldValidator;
-import com.devjsmh.icea.content_manager_service.content.services.validation.FieldValidatorRegistry;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,13 +18,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class ContentValidationService {
 
-    private final FieldValidatorRegistry validatorsRegistry;
+    private final ContentTypeFieldRegistry validatorsRegistry;
 
-    public ContentValidationService(FieldValidatorRegistry validatorsRegistry) {
+    public ContentValidationService(ContentTypeFieldRegistry validatorsRegistry) {
         this.validatorsRegistry = validatorsRegistry;
     }
 
-    public List<String> validate(List<ContentTypeField> fieldSchema, List<Map<String, Object>> contentBlocks) {
+    public List<String> validate(JsonNode fieldSchema, List<Map<String, Object>> contentBlocks) {
 
         List<String> errors = new ArrayList<>();
 
@@ -33,7 +33,7 @@ public class ContentValidationService {
             errors.add(err);
         }
 
-        for (ContentTypeField fieldDefinition : fieldSchema) {
+        for (JsonNode fieldDefinition : fieldSchema) {
             String err = this.validateField(fieldDefinition, contentBlocks);
             if (err != null) {
                 errors.add(err);
@@ -43,25 +43,25 @@ public class ContentValidationService {
         return errors;
     }
 
-    public String validateField(ContentTypeField fieldDefinition, List<Map<String, Object>> contentBlocks) {
+    public String validateField(JsonNode fieldDefinition, List<Map<String, Object>> contentBlocks) {
 
-        String fieldName = fieldDefinition.getName();
-        String fieldType = fieldDefinition.getType();
-        boolean isRequired = fieldDefinition.isRequired();
+        String fieldName = fieldDefinition.get("name").asText();
+        String fieldType = fieldDefinition.get("type").asText();
+        boolean isRequired = fieldDefinition.get("required").asBoolean();
 
         // get from content data
         Object block = this.getFieldByName(fieldName, contentBlocks);
 
-        JsonNode value = this.toJson(block);
-
         // -------- REQUIRED CHECK ----------
-        if (isRequired && (value == null || value.isNull())) {
+        if (isRequired && (block == null)) {
             return "Missing required field: " + fieldName;
         }
 
-        if (value == null || value.isNull()) {
+        if (block == null) {
             return "Missing field: " + fieldName;
         }
+
+        JsonNode value = this.toJson(block);
 
         FieldValidator validator = validatorsRegistry.get(fieldType);
         return validator.validate(fieldName, value);

@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
  * @author Jhonatan Samuel Martinez Hernandez
  */
 @Component
-public class FieldValidatorRegistry {
+public class ContentTypeFieldRegistry {
 
-    private static final Logger logger = LoggerFactory.getLogger(FieldValidatorRegistry.class);
+    private static final Logger logger = LoggerFactory.getLogger(ContentTypeFieldRegistry.class);
 
     private final Map<String, FieldValidator> registry = new HashMap<>();
 
@@ -27,7 +27,7 @@ public class FieldValidatorRegistry {
      */
     public void add(String type, FieldValidator validator) {
         registry.put(type, validator);
-        logger.info("A validator was successfully registered for the field type: {}", type);
+        logger.info("A field of type: {} was successfully registered", type);
     }
 
     /**
