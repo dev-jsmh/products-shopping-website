@@ -22,7 +22,7 @@ The avilable supported fields are:
 * Media
 * Date
 
-More fields are planed to be added in the future and some of them are:
+More fields are planned to be added in the future and some of them are:
 
 * Boolean
 * Number
@@ -37,7 +37,7 @@ for instance, a blog content entry is the result of building a new entry using t
 
 ## Media:
 
-This feature allows to store in the server file system any of the supported multimedia content. By the moment only images and videos are planed to be used in the API. 
+This feature allows to store in the server file system any of the supported multimedia content. By the moment only images and videos are planned to be used in the API. 
 
 The users will be able to used these media files in any of the content types that has a "media" field in its configuration. a multimedia file can also be used in serveral content entries at the same time or just in one content entry.
 
