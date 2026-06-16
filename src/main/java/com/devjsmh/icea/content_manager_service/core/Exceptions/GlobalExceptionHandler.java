@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -130,5 +131,24 @@ public class GlobalExceptionHandler {
                 details);
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    // This exception handler belongs to the authentication module
+    
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiErrorResponse> handleBadCredentialException(BadCredentialsException ex,
+            ServletWebRequest request) {
+
+        String requestUrl = request.getRequest().getRequestURI();
+
+        ApiErrorResponse error = new ApiErrorResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                "Invalid username or password",
+                requestUrl);
+
+        ex.printStackTrace();
+
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 }
