@@ -20,7 +20,8 @@ public class JwtUtil {
 
     @Value("${JWT_SECRET_KEY}")
     private String JWT_SECRECT_KEY;
-    private Long ACCESS_TOKEN_EXPIRATION_TIME = 302_900_000L;
+    private Long ACCESS_TOKEN_EXPIRATION_TIME = 420_000L;
+    private Long REFRESH_TOKEN_EXPIRATION_TIME = 604_800_000L;
 
     private Claims extractAllClaims(String token) {
 
@@ -66,6 +67,16 @@ public class JwtUtil {
     private SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(JWT_SECRECT_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String createRefreshToken(UserEntity user) {
+
+        return Jwts.builder()
+                .subject(user.getUsername())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + this.REFRESH_TOKEN_EXPIRATION_TIME))
+                .signWith(getSignInKey())
+                .compact();
     }
 
 }
