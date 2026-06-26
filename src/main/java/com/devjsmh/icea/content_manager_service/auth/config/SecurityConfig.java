@@ -39,6 +39,8 @@ public class SecurityConfig {
                         .authenticated()
                         .requestMatchers("/api/v1/contents")
                         .authenticated()
+                        .requestMatchers("/api/auth/extend-session")
+                        .authenticated()
                         .anyRequest()
                         .permitAll())
                 .addFilterBefore(_jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
