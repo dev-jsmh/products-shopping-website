@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.devjsmh.icea.content_manager_service.auth.dtos.AuthenticationRequest;
 import com.devjsmh.icea.content_manager_service.auth.dtos.AuthenticationResponse;
+import com.devjsmh.icea.content_manager_service.auth.dtos.RefreshTokenRequest;
 import com.devjsmh.icea.content_manager_service.auth.entities.TokenEntity;
 import com.devjsmh.icea.content_manager_service.auth.entities.UserEntity;
 import com.devjsmh.icea.content_manager_service.auth.repositories.TokensRepository;
@@ -106,6 +107,27 @@ public class AuthenticationService {
         UserEntity user = new UserEntity(authRequest.getUsername(), encodedPassword);
 
         return this._usersRepository.save(user);
+    }
+
+    public AuthenticationResponse extendSession(RefreshTokenRequest refreshTokenRequest) {
+
+        if (refreshTokenRequest.getToken() == null) {
+            throw new IllegalArgumentException("The request most contain a valid token");
+        }
+
+        String refreshToken = refreshTokenRequest.getToken();
+
+        String username = this._jwtUtil.extractUsername(refreshToken);
+
+        UserEntity user = this._usersRepository.findByUsername(username).orElseThrow();
+
+        revokeAllUserTokens(user);
+
+        String token = this._jwtUtil.createToken(user);
+
+        saveUserToken(user, token);
+
+        return new AuthenticationResponse(token, refreshToken);
     }
 
 }
