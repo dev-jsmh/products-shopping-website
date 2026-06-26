@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.devjsmh.icea.content_manager_service.auth.dtos.AuthenticationRequest;
 import com.devjsmh.icea.content_manager_service.auth.dtos.AuthenticationResponse;
+import com.devjsmh.icea.content_manager_service.auth.dtos.RefreshTokenRequest;
 import com.devjsmh.icea.content_manager_service.auth.entities.UserEntity;
 import com.devjsmh.icea.content_manager_service.auth.services.AuthenticationService;
 
@@ -49,5 +50,17 @@ public class AuthenticationController {
         logOutResponse.put("message", "User loged out succesfully");
 
         return ResponseEntity.ok().body(logOutResponse);
+    }
+
+    /**
+     * Extends the current active user session using a refresh token
+     * @param request contains the old token and refresh token
+     * @return A new valid token
+     */
+    @PostMapping("/extend-session")
+    public ResponseEntity<AuthenticationResponse> extendUserSession(@RequestBody RefreshTokenRequest request) {
+
+        AuthenticationResponse res = this._authenticationService.extendSession(request);
+        return ResponseEntity.ok().body(res);
     }
 }
