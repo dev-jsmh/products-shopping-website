@@ -50,10 +50,11 @@ public class AuthenticationService {
         this.revokeAllUserTokens(user);
 
         String accessToken = this._jwtUtil.createToken(user);
+        String refreshToken = this._jwtUtil.createRefreshToken(user);
 
         this.saveUserToken(user, accessToken);
 
-        return new AuthenticationResponse(accessToken);
+        return new AuthenticationResponse(accessToken, refreshToken);
     }
 
     private void saveUserToken(UserEntity user, String jwtToken) {
