@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Componentes Electronicos | Jhonatan's E-shopping Website</title>
+    <!-- css styles -->
+    <link rel="preload" as="style" th:href="@{/assets/css/columns-system.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/columns-system.css}">
+    <link rel="preload" th:href="@{/assets/css/main.css}" as="style">
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}">
+    <link rel="preload" th:href="@{/assets/css/swiper-bundle.min.css}" as="style">
+    <link rel="stylesheet" th:href="@{/assets/css/swiper-bundle.min.css}">
+    <link rel="preload" th:href="@{/assets/css/product-details.css}" as="style">
+    <link rel="stylesheet" th:href="@{/assets/css/product-details.css}">
+</head>
+
+<body>
+    <header style="background-color: #000000; height: 64px;">
+    </header>
+    <main>
+        <div class="breadcrumb_wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-1">
+                        <a th:href="@{/}">Inicio</a> > <a id="breadcrumb-link" href=""></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="breadcrumb-spacing"></div>
+        <section class="product-firt-section">
+            <div class="container">
+                <div class="row">
+                    <!-- product gallery -->
+                    <div class="product-images-box col-lg-6 mb-3">
+                        <div class="swiper product-gallery">
+                            <div class="swiper-wrapper">
+                                <!-- product images goes here -->
+                            </div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+                        </div>
+                        <div class="swiper gallery-thumbnail">
+                            <div class="swiper-wrapper">
+                                <!-- product images goes here -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- product gallery -->
+                    <div class="col-lg-6 mb-3">
+                        <div class="product-name-wrap">
+                            <h1 class="product-name" itemprop="name" id="product-name">
+                                [[${product.name}]]
+                            </h1>
+                            <h6 id="product-sku">#SKU [[${product.sku}]]</h6>
+                        </div>
+                        <div class="product-information">
+                            <div class="product-description" itemprop="description" id="product-description">
+                                <p>
+                                    Tódulo 4G LTE CAT1 ESP32 con GPS integrado Q334, ideal para IoT. Compatible con
+                                    redes
+                                    LTE-FDD y GSM, ofrece conectividad Wi-Fi y Bluetooth. Incluye soporte para...
+
+                                    No hay información de llegada de productos disponible en este momento.
+                                </p>
+                            </div>
+                            <div class="divider-item"></div>
+                            <div class="product-price-block">
+                                <span class="product-current-price" itemprop="price" th:content="${product.price}" id="product-current-price">
+                                    $ [[${product.price}]]
+                                </span>
+                            </div>
+                            <div class="product-actions">
+                                <div class="mb-3">
+                                    <div class="product-available" id="product-available">En Stock</div>
+                                    <div class="product-quantity">
+                                        <div class="qty-wraper mr-b6">
+                                            <div class="input-group">
+                                                <button id="btn-decrease-qty" class="btn qty-button">-</button>
+                                                <input id="quantity-wanted" class="form-control" type="number" value="1"
+                                                    min="1">
+                                                <button id="btn-increase-qty" class="btn qty-button">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="add">
+                                            <button class="btn btn-default btn-large mr-b6">Añadir al
+                                                carrito</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="divider-item"></div>
+                                <!-- add to wishlist button -->
+                                <a class="btn-add-to-wishlist" href="#" title="Lista de deseos">
+                                    <div class="add-to-wishlist-box">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                            <path
+                                                d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z" />
+                                        </svg>
+                                        <span>Añadir a lista de deseos</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script defer th:src="@{/assets/js/swiper-bundle.min.js}"></script>
+    <script defer th:src="@{/assets/js/products.js}"></script>
+    <script defer th:src="@{/assets/js/product-details.js}"></script>
+</body>
+
+</html>

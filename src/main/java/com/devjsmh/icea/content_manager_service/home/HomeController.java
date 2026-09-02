@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.devjsmh.icea.content_manager_service.products.Product;
 import com.devjsmh.icea.content_manager_service.products.ProductImage;
@@ -134,5 +135,17 @@ public class HomeController {
 
         model.addAttribute("products", this.products);
         return "index";
+    }
+
+    @GetMapping("/product-details")
+    public String details(Model model, @RequestParam("id") Long productId) {
+
+        Product product = this.products.stream()
+                .filter(p -> p.getId() == productId)
+                .findFirst()
+                .get();
+
+        model.addAttribute("product", product);
+        return "views/product-details";
     }
 }
