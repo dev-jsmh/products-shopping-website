@@ -97,28 +97,28 @@
 
 @media(min-width: 768px) {
     .container {
-        width: 768px;
+        width: 720px;
         max-width: 100%;
     }
 }
 
 @media (min-width: 992px) {
     .container {
-        width: 992px;
+        width: 800px;
         max-width: 100%;
     }
 }
 
 @media (min-width: 1200px) {
     .container {
-        width: 1200px;
+        width: 880px;
         max-width: 100%;
     }
 }
 
 @media (min-width: 1400px) {
     .container {
-        width: 1400px;
+        width: 1160px;
         max-width: 100%;
     }
 }
