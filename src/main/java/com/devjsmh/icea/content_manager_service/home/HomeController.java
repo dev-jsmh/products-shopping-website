@@ -8,13 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.devjsmh.icea.content_manager_service.products.Product;
+import com.devjsmh.icea.content_manager_service.products.ProductEntity;
 import com.devjsmh.icea.content_manager_service.products.ProductImageEntity;
 
 @Controller
 public class HomeController {
 
-    private List<Product> products = new ArrayList<>();
+    private List<ProductEntity> products = new ArrayList<>();
 
     public HomeController() {
 
@@ -39,7 +39,7 @@ public class HomeController {
         p1Images.add(p1Image4);
 
         /** Image list for arduino * */
-        Product p1 = new Product("Arduboard Uno R4 WiFi (compatible)", 114.000, "001326");
+        ProductEntity p1 = new ProductEntity("Arduboard Uno R4 WiFi (compatible)", 114.000, "001326");
         p1.setId(1L);
         p1.setImage_url("./../assets/images/arduino-r4-wifi-1.webp");
         p1.setImage_alt("arduino-r4-wifi");
@@ -66,7 +66,7 @@ public class HomeController {
         p2Images.add(p2Image4);
 
         /** --------------- Image list for bicicle --------------- */
-        Product p2 = new Product("Bicicleta Roadmaster", 156.990, "0032449");
+        ProductEntity p2 = new ProductEntity("Bicicleta Roadmaster", 156.990, "0032449");
         p2.setId(2L);
         p2.setImage_url("./../assets/images/bicicleta-roadmaster-1.webp");
         p2.setImage_alt("bicicleta-roadmaster");
@@ -87,7 +87,7 @@ public class HomeController {
         p3Images.add(p3Image2);
 
         /** --------------- Image list for cable jumpers --------------- */
-        Product p3 = new Product("Cables Jumper X 20", 25.000, "001036");
+        ProductEntity p3 = new ProductEntity("Cables Jumper X 20", 25.000, "001036");
         p3.setId(3L);
         p3.setImage_url("./../assets/images/cables-jumper-1.webp");
         p3.setImage_alt("cables-jumper");
@@ -117,7 +117,7 @@ public class HomeController {
         p4Images.add(p4Image3);
         p4Images.add(p4Image4);
 
-        Product p4 = new Product("Multimetro Digital", 45.000, "0934838");
+        ProductEntity p4 = new ProductEntity("Multimetro Digital", 45.000, "0934838");
         p4.setId(4L);
         p4.setImage_url("./../assets/images/multimetro-1.webp");
         p4.setImage_alt("multimetro-digital");
@@ -140,7 +140,7 @@ public class HomeController {
     @GetMapping("/product-details")
     public String details(Model model, @RequestParam("id") Long productId) {
 
-        Product product = this.products.stream()
+        ProductEntity product = this.products.stream()
                 .filter(p -> p.getId() == productId)
                 .findFirst()
                 .get();
