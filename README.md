@@ -1,4 +1,10 @@
-# Content Manager Service
+# E-Shopping website
+<img width="1600" height="900" alt="Screenshot from 2026-09-02 17-05-56" src="https://github.com/user-attachments/assets/0d1b553e-963c-4e85-aa9d-dc077fcbb47f" />
+
+This is the main entry point of the shopping website. the user experience begins here. The products list will be shown here so the user can select any of the products a watch its details. so later he can take the decision of adding it to its shopping cart to buy it.
+
+
+### Content Manager Service
 
 
 Authored and developed by: Jhonatan Samuel Martinez Hernandez
