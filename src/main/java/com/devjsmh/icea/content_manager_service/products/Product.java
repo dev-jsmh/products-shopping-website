@@ -10,7 +10,7 @@ public class Product {
     private String sku;
     private String image_url;
     private String image_alt;
-    private List<ProductImage> images;
+    private List<ProductImageEntity> images;
 
     public Product(String name, Double price, String sku) {
         this.name = name;
@@ -66,11 +66,11 @@ public class Product {
         this.image_alt = image_alt;
     }
 
-    public List<ProductImage> getImages() {
+    public List<ProductImageEntity> getImages() {
         return images;
     }
 
-    public void setImages(List<ProductImage> images) {
+    public void setImages(List<ProductImageEntity> images) {
         this.images = images;
     }
 

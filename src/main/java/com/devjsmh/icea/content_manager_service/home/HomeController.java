@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.devjsmh.icea.content_manager_service.products.Product;
-import com.devjsmh.icea.content_manager_service.products.ProductImage;
+import com.devjsmh.icea.content_manager_service.products.ProductImageEntity;
 
 @Controller
 public class HomeController {
@@ -19,18 +19,18 @@ public class HomeController {
     public HomeController() {
 
         /** Image list for arduino * */
-        List<ProductImage> p1Images = new ArrayList<>();
+        List<ProductImageEntity> p1Images = new ArrayList<>();
 
-        ProductImage p1Image1 = new ProductImage();
+        ProductImageEntity p1Image1 = new ProductImageEntity();
         p1Image1.setUrl("./../assets/images/arduino-r4-wifi-2.webp");
 
-        ProductImage p1Image2 = new ProductImage();
+        ProductImageEntity p1Image2 = new ProductImageEntity();
         p1Image2.setUrl("./../assets/images/arduino-r4-wifi-3.webp");
 
-        ProductImage p1Image3 = new ProductImage();
+        ProductImageEntity p1Image3 = new ProductImageEntity();
         p1Image3.setUrl("./../assets/images/arduino-r4-wifi-4.webp");
 
-        ProductImage p1Image4 = new ProductImage();
+        ProductImageEntity p1Image4 = new ProductImageEntity();
         p1Image4.setUrl("./../assets/images/arduino-r4-wifi-1.webp");
 
         p1Images.add(p1Image1);
@@ -46,18 +46,18 @@ public class HomeController {
         p1.setImages(p1Images);
 
         /** --------------- Image list for bicicle --------------- */
-        List<ProductImage> p2Images = new ArrayList<>();
+        List<ProductImageEntity> p2Images = new ArrayList<>();
 
-        ProductImage p2Image1 = new ProductImage();
+        ProductImageEntity p2Image1 = new ProductImageEntity();
         p2Image1.setUrl("./../assets/images/bicicleta-roadmaster-1.webp");
 
-        ProductImage p2Image2 = new ProductImage();
+        ProductImageEntity p2Image2 = new ProductImageEntity();
         p2Image2.setUrl("./../assets/images/bicicleta-roadmaster-2.webp");
 
-        ProductImage p2Image3 = new ProductImage();
+        ProductImageEntity p2Image3 = new ProductImageEntity();
         p2Image3.setUrl("./../assets/images/bicicleta-roadmaster-3.webp");
 
-        ProductImage p2Image4 = new ProductImage();
+        ProductImageEntity p2Image4 = new ProductImageEntity();
         p2Image3.setUrl("./../assets/images/bicicleta-roadmaster-4.webp");
 
         p2Images.add(p2Image1);
@@ -73,13 +73,13 @@ public class HomeController {
         p2.setImages(p2Images);
 
         /** --------------- Image list for cable jumpers --------------- */
-        List<ProductImage> p3Images = new ArrayList<>();
+        List<ProductImageEntity> p3Images = new ArrayList<>();
 
-        ProductImage p3Image1 = new ProductImage();
+        ProductImageEntity p3Image1 = new ProductImageEntity();
         p3Image1.setUrl("./../assets/images/cables-jumper-1.webp");
         p3Image1.setAltText("Cables Jumper X 20");
 
-        ProductImage p3Image2 = new ProductImage();
+        ProductImageEntity p3Image2 = new ProductImageEntity();
         p3Image2.setUrl("./../assets/images/cables-jumper-2.webp");
         p3Image2.setAltText("Cables Jumper X 20");
 
@@ -94,21 +94,21 @@ public class HomeController {
         p3.setImages(p3Images);
 
         /** --------------- Image list for multimeter --------------- */
-        List<ProductImage> p4Images = new ArrayList<>();
+        List<ProductImageEntity> p4Images = new ArrayList<>();
 
-        ProductImage p4Image1 = new ProductImage();
+        ProductImageEntity p4Image1 = new ProductImageEntity();
         p4Image1.setUrl("./../assets/images/multimetro-1.webp");
         p4Image1.setAltText("Multimetro Digital");
 
-        ProductImage p4Image2 = new ProductImage();
+        ProductImageEntity p4Image2 = new ProductImageEntity();
         p4Image2.setUrl("./../assets/images/multimetro-2.webp");
         p4Image2.setAltText("Multimetro Digital");
 
-        ProductImage p4Image3 = new ProductImage();
+        ProductImageEntity p4Image3 = new ProductImageEntity();
         p4Image3.setUrl("./../assets/images/multimetro-3.webp");
         p4Image3.setAltText("Multimetro Digital");
 
-        ProductImage p4Image4 = new ProductImage();
+        ProductImageEntity p4Image4 = new ProductImageEntity();
         p4Image4.setUrl("./../assets/images/multimetro-4.webp");
         p4Image4.setAltText("Multimetro Digital");
 
