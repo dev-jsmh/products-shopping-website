@@ -22,6 +22,9 @@ public class ProductEntity {
     private String image_alt;
     private List<ProductImageEntity> images;
 
+    public ProductEntity() {
+    }
+
     public ProductEntity(String name, Double price, String sku) {
         this.name = name;
         this.price = price;
