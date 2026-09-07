@@ -92,4 +92,15 @@ public class ProductEntity {
         this.images = images;
     }
 
+    // Utility methods to manage images of this product
+    public void addImage(ProductImageEntity image) {
+        image.setProduct(this);
+        this.images.add(image);
+    }
+
+    public void removeImage(ProductImageEntity image) {
+        image.setProduct(null);
+        this.images.remove(image);
+    }
+
 }
