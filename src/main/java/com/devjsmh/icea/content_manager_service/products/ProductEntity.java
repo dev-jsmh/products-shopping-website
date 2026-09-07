@@ -1,18 +1,36 @@
 package com.devjsmh.icea.content_manager_service.products;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Product {
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "products")
+public class ProductEntity {
+
+    @Id()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private Double price;
     private String sku;
     private String image_url;
     private String image_alt;
-    private List<ProductImage> images;
 
-    public Product(String name, Double price, String sku) {
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductImageEntity> images = new ArrayList<>();
+
+    public ProductEntity() {
+    }
+
+    public ProductEntity(String name, Double price, String sku) {
         this.name = name;
         this.price = price;
         this.sku = sku;
@@ -66,12 +84,23 @@ public class Product {
         this.image_alt = image_alt;
     }
 
-    public List<ProductImage> getImages() {
+    public List<ProductImageEntity> getImages() {
         return images;
     }
 
-    public void setImages(List<ProductImage> images) {
+    public void setImages(List<ProductImageEntity> images) {
         this.images = images;
+    }
+
+    // Utility methods to manage images of this product
+    public void addImage(ProductImageEntity image) {
+        image.setProduct(this);
+        this.images.add(image);
+    }
+
+    public void removeImage(ProductImageEntity image) {
+        image.setProduct(null);
+        this.images.remove(image);
     }
 
 }
