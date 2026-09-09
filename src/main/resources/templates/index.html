@@ -17,7 +17,15 @@
     </header>
     <main>
         <section class="products container">
-            <ul id="product-list" class="product-list row" role="list">
+            <!-- show this block only if the list has no products -->
+            <div class="alert alert-success" th:if="${#lists.isEmpty(products)}">
+                <p>
+                    Por el momento no tenemos productos disponibles. ¡Pero pronto tendremos novedades!
+                </p>
+            </div>
+
+            <!-- show the list if there are products in the list -->
+            <ul th:if="${products != null and #lists.size(products) > 0}" id="product-list" class="product-list row" role="list">
                 <li th:each="product : ${products}" class="product-list-item col-6 col-md-4 col-lg-4 col-xl-4 col-xxl-3">
                     <article class="product-outer-box">
                         <a class="product_img_link" th:href="@{|/product-details?id=${product.id}|}">
