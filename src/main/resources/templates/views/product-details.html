@@ -24,7 +24,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 text-1">
-                        <a th:href="@{/}">Inicio</a> > <a id="breadcrumb-link" href=""></a>
+                        <a th:href="@{/}">Inicio</a> > <a id="breadcrumb-link"
+                            th:href="@{|/product-details?id=${product.id}|}">[[${product.name}]]</a>
                     </div>
                 </div>
             </div>

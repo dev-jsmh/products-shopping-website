@@ -17,10 +17,6 @@ const currentProduct = products.find((p) => {
     }
 });
 
-let breadcrumb = $("#breadcrumb-link");
-breadcrumb.innerHTML = currentProduct.title;
-breadcrumb.setAttribute("href", window.location.href);
-
 let imagesQuantity = 0;
 // queries DOM to access children nodes of thumbnail gallery
 const galleryThumbnail = $(".swiper.gallery-thumbnail > .swiper-wrapper");
