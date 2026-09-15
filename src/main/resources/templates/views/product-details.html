@@ -37,14 +37,32 @@
                     <div class="product-images-box col-lg-6 mb-3">
                         <div class="swiper product-gallery">
                             <div class="swiper-wrapper">
-                                <!-- product images goes here -->
+                                <!-- main product image -->
+                                <div class="swiper-slide">
+                                    <img th:src="${product.image_url}" th:alt="${product.image_alt}">
+                                </div>
+                                <!-- main product image -->
+                                <!-- render product gallery of images -->
+                                <div th:each="image : ${product.getImages()}" class="swiper-slide">
+                                    <img th:src="${image.url}" th:alt="${image.altText}">
+                                </div>
+                                <!-- render product gallery of images -->
                             </div>
                             <div class="swiper-button-prev"></div>
                             <div class="swiper-button-next"></div>
                         </div>
                         <div class="swiper gallery-thumbnail">
                             <div class="swiper-wrapper">
-                                <!-- product images goes here -->
+                                <!-- main product image -->
+                                <div class="swiper-slide">
+                                    <img th:src="${product.image_url}" th:alt="${product.image_alt}">
+                                </div>
+                                <!-- main product image -->
+                                <!-- render product images as thumbnails -->
+                                <div th:each="image : ${product.getImages()}" class="swiper-slide">
+                                    <img th:src="${image.url}" th:alt="${image.altText}">
+                                </div>
+                                <!-- render product images as thumbnails -->
                             </div>
                         </div>
                     </div>
