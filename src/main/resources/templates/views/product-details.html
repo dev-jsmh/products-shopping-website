@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda de Componentes Electronicos | Jhonatan's E-shopping Website</title>
+    <title>Tienda de Artículos | Jhonatan's E-shopping Website</title>
     <!-- css styles -->
     <link rel="preload" as="style" th:href="@{/assets/css/columns-system.css}">
     <link rel="stylesheet" th:href="@{/assets/css/columns-system.css}">
@@ -24,7 +24,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 text-1">
-                        <a th:href="@{/}">Inicio</a> > <a id="breadcrumb-link" href=""></a>
+                        <a th:href="@{/}">Inicio</a> > <a id="breadcrumb-link"
+                            th:href="@{|/product-details?id=${product.id}|}">[[${product.name}]]</a>
                     </div>
                 </div>
             </div>
@@ -37,14 +38,32 @@
                     <div class="product-images-box col-lg-6 mb-3">
                         <div class="swiper product-gallery">
                             <div class="swiper-wrapper">
-                                <!-- product images goes here -->
+                                <!-- main product image -->
+                                <div class="swiper-slide">
+                                    <img th:src="${product.image_url}" th:alt="${product.image_alt}">
+                                </div>
+                                <!-- main product image -->
+                                <!-- render product gallery of images -->
+                                <div th:each="image : ${product.getImages()}" class="swiper-slide">
+                                    <img th:src="${image.url}" th:alt="${image.altText}">
+                                </div>
+                                <!-- render product gallery of images -->
                             </div>
                             <div class="swiper-button-prev"></div>
                             <div class="swiper-button-next"></div>
                         </div>
                         <div class="swiper gallery-thumbnail">
                             <div class="swiper-wrapper">
-                                <!-- product images goes here -->
+                                <!-- main product image -->
+                                <div class="swiper-slide">
+                                    <img th:src="${product.image_url}" th:alt="${product.image_alt}">
+                                </div>
+                                <!-- main product image -->
+                                <!-- render product images as thumbnails -->
+                                <div th:each="image : ${product.getImages()}" class="swiper-slide">
+                                    <img th:src="${image.url}" th:alt="${image.altText}">
+                                </div>
+                                <!-- render product images as thumbnails -->
                             </div>
                         </div>
                     </div>
@@ -111,7 +130,6 @@
     </main>
     <script defer th:src="@{/assets/js/navigation-menu.js}"></script>
     <script defer th:src="@{/assets/js/swiper-bundle.min.js}"></script>
-    <script defer th:src="@{/assets/js/products.js}"></script>
     <script defer th:src="@{/assets/js/product-details.js}"></script>
 </body>
 
