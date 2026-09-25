@@ -76,15 +76,9 @@
                             <h6 id="product-sku">#SKU [[${product.sku}]]</h6>
                         </div>
                         <div class="product-information">
-                            <div class="product-description" itemprop="description" id="product-description">
-                                <p>
-                                    Tódulo 4G LTE CAT1 ESP32 con GPS integrado Q334, ideal para IoT. Compatible con
-                                    redes
-                                    LTE-FDD y GSM, ofrece conectividad Wi-Fi y Bluetooth. Incluye soporte para...
-
-                                    No hay información de llegada de productos disponible en este momento.
-                                </p>
-                            </div>
+                            <article th:utext="${product.description}" class="product-description"
+                                itemprop="description" id="product-description">
+                            </article>
                             <div class="divider-item"></div>
                             <div class="product-price-block">
                                 <span class="product-current-price" itemprop="price" th:content="${product.price}" id="product-current-price">
