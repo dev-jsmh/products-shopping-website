@@ -251,11 +251,6 @@ html {
     font-family: inherit;
 }
 
-.product-information p {
-    margin-top: 0;
-    margin-bottom: 1rem;
-}
-
 .product-information .product-description {
     display: inline-block;
     height: 100%;
