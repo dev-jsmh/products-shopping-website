@@ -33,7 +33,7 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #e0e0e0;
+    /** background: #e0e0e0; */
     background-size: cover;
     background-position: center;
 }
