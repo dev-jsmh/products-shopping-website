@@ -16,10 +16,6 @@
     box-sizing: border-box
 }
 
-html {
-    background-color: #ededed;
-}
-
 /************ products styles ************/
 .products {
     padding-top: 2rem;
@@ -94,11 +90,13 @@ html {
     color: #2c873b;
 }
 
+/**
 .product-list-reference {
     width: 100%;
     margin-bottom: 0.5rem;
     text-align: center;
-}
+    text-transform: uppercase;
+}*/
 
 .product-title-box {
     width: 100%;
