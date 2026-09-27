@@ -90,6 +90,52 @@
     transition: all 0.3s ease;
 }
 
+/** ------- top bar infinite carousel ------**/
+.top-bar-carousel {
+    color: #ffffff;
+    background-color: #b221cf;
+    margin: 0 auto;
+    padding: 7px 0;
+    overflow: hidden;
+    display: flex;
+
+    >* {
+        flex: 0 0 100%;
+    }
+
+    &:hover .group {
+        animation-play-state: paused;
+    }
+}
+
+.top-bar-carousel .group {
+    display: flex;
+    gap: 0.6rem;
+    /* Add padding to the right to create a gap between the last and first card. */
+    padding-right: 0.6rem;
+    /* We should be nice to the browser - let it know what we're going to animate. */
+    will-change: transform;
+    animation: scrolling 60s linear infinite;
+}
+
+.top-bar-carousel .group .carousel-item {
+    display: inherit;
+    min-height: 13px;
+    justify-content: center;
+    align-items: center;
+}
+
+/** Animates the items within the top bar infinite carousel **/
+@keyframes scrolling {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
 /* --- Mobile Responsive Styles --- */
 @media (max-width: 768px) {
 
