@@ -16,10 +16,6 @@
     box-sizing: border-box
 }
 
-html {
-    background-color: #ededed;
-}
-
 /************ products styles ************/
 .products {
     padding-top: 2rem;
