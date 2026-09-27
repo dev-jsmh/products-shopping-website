@@ -13,6 +13,10 @@ h2 {
     display: flex;
 }
 
+.product-sku {
+    text-transform: uppercase;
+}
+
 .product-specifications {
     padding: 0 1rem;
     overflow-x: auto;
@@ -29,7 +33,7 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #e0e0e0;
+    /** background: #e0e0e0; */
     background-size: cover;
     background-position: center;
 }

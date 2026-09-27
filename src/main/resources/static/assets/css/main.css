@@ -215,6 +215,12 @@ html {
     background-color: #ffffff;
 }
 
+.breadcrumb-link {
+    text-decoration: none;
+    color: #444;
+
+}
+
 .breadcrumb-spacing {
     height: 20px;
     font-size: 0;
@@ -246,7 +252,7 @@ html {
     font-weight: 400;
     line-height: 120%;
     margin-bottom: 1rem;
-    color: #444;
+    color: inherit;
 }
 
 .product-name-wrap h6 {
