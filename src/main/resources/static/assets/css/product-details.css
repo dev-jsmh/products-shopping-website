@@ -1,6 +1,21 @@
+h2 {
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+    line-height: 1.1;
+    color: inherit;
+    font-family: inherit;
+}
+
+/** Product details **/
 .product-images-box {
     max-height: 570px;
     display: flex;
+}
+
+.product-specifications {
+    padding: 0 1rem;
+    overflow-x: auto;
 }
 
 .swiper.product-gallery {

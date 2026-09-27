@@ -121,6 +121,15 @@
                 </div>
             </div>
         </section>
+        <!--- product especifications --->
+        <section class="container"
+            th:if="${product.specifications != null and !#strings.isEmpty(product.specifications)}">
+            <div class="divider-item"></div>
+            <h2>Especificaciones del producto</h2>
+            <article class="product-specifications mb-3" th:utext="${product.specifications}">
+            </article>
+        </section>
+        <!--- product especifications --->
     </main>
     <script defer th:src="@{/assets/js/navigation-menu.js}"></script>
     <script defer th:src="@{/assets/js/swiper-bundle.min.js}"></script>

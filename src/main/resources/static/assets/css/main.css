@@ -225,6 +225,13 @@ html {
     text-align: left;
 }
 
+/** ---- Divider item ---- */
+.divider-item {
+    margin: .75rem auto;
+    overflow: hidden;
+    border: 1px solid #e1e1e1;
+}
+
 /** Product details column styles  */
 .product-name-wrap {
     -webkit-box-align: start;
