@@ -24,7 +24,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 text-1">
-                        <a th:href="@{/}">Inicio</a> > <a id="breadcrumb-link"
+                        <a class="breadcrumb-link" th:href="@{/}">Inicio</a> > <a class="breadcrumb-link"
                             th:href="@{|/product-details?id=${product.id}|}">[[${product.name}]]</a>
                     </div>
                 </div>
@@ -73,7 +73,10 @@
                             <h1 class="product-name" itemprop="name" id="product-name">
                                 [[${product.name}]]
                             </h1>
-                            <h6 id="product-sku">#SKU [[${product.sku}]]</h6>
+                            <!-- render SKU number if exists -->
+                            <h6 class="product-sku" th:if="${!#strings.isEmpty(product.sku)}">
+                                #SKU [[${product.sku}]]
+                            </h6>
                         </div>
                         <div class="product-information">
                             <article th:utext="${product.description}" class="product-description"
