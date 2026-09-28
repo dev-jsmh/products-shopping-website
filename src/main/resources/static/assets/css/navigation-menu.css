@@ -123,6 +123,7 @@
     min-height: 13px;
     justify-content: center;
     align-items: center;
+    white-space: nowrap;
 }
 
 /** Animates the items within the top bar infinite carousel **/
