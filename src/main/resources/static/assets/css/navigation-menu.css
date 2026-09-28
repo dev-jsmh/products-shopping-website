@@ -110,15 +110,16 @@
 
 .top-bar-carousel .group {
     display: flex;
-    gap: 0.6rem;
-    /* Add padding to the right to create a gap between the last and first card. */
-    padding-right: 0.6rem;
+    gap: 10rem;
+    /*  Add padding to the right to create a gap between the last and first card. */
+    padding-right: 10rem;
     /* We should be nice to the browser - let it know what we're going to animate. */
     will-change: transform;
     animation: scrolling 60s linear infinite;
 }
 
 .top-bar-carousel .group .carousel-item {
+    width: 100%;
     display: inherit;
     min-height: 13px;
     justify-content: center;
