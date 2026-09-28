@@ -95,7 +95,7 @@
     color: #ffffff;
     background-color: #b221cf;
     margin: 0 auto;
-    padding: 7px 0;
+    padding: 3px 0;
     overflow: hidden;
     display: flex;
 
@@ -121,7 +121,6 @@
 .top-bar-carousel .group .carousel-item {
     width: 100%;
     display: inherit;
-    min-height: 13px;
     justify-content: center;
     align-items: center;
     white-space: nowrap;
