@@ -35,19 +35,64 @@
         </div>
         <div class="navbar">
             <div class="nav-left">
-                <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
+                <!-- Botón Hamburguesa (Visible solo en móvil) -->
+                <button class="hamburger-btn" id="openSideNavbarMenu" aria-label="Abrir menú">
+                    <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12h18M3 6h18M3 18h18"></path>
+                    </svg>
                 </button>
+            </div>
 
+            <div class="nav-center">
                 <a class="logo" th:href="@{/}">SHOPPING WEBSITE</a>
+                <!-- DESKTOP NAV CON SUBMENÚS MULTINIVEL -->
+                <nav class="desktop-nav">
+                    <ul class="desktop-menu">
+                        <li><a href="#" class="desktop-link">VER TODO</a></li>
 
-                <nav class="nav-menu" id="nav-menu">
-                    <ul class="nav-list">
-                        <li class="nav-item"><a href="#" class="nav-link">Categorias</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Nosotros</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Contáctanos</a></li>
+                        <!-- NIVEL 1: HOMBRES -->
+                        <li class="dropdown-parent">
+                            <a href="#" class="desktop-link">RELOJES <span class="arrow">▾</span></a>
+
+                            <!-- NIVEL 2 DESPLEGABLE -->
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-sub-parent">
+                                    <a href="#">POR MARCA <span class="arrow-right">▸</span></a>
+                                    <!-- NIVEL 3 FLOTANTE -->
+                                    <ul class="dropdown-sub-menu">
+                                        <li><a href="#">Curren</a></li>
+                                        <li><a href="#">Naviforce</a></li>
+                                        <li><a href="#">Poedagar</a></li>
+                                        <li><a href="#">Lucky fox</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="dropdown-sub-parent">
+                                    <a href="#">POR LOOK <span class="arrow-right">▸</span></a>
+                                    <!-- NIVEL 3 FLOTANTE -->
+                                    <ul class="dropdown-sub-menu">
+                                        <li><a href="#">Clásicos</a></li>
+                                        <li><a href="#">Deportivos</a></li>
+                                        <li><a href="#">Casuales</a></li>
+                                    </ul>
+                                </li>
+
+                                <li><a href="#">TODOS LOS RELOJES</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- NIVEL 1: MUJERES -->
+                        <li class="dropdown-parent">
+                            <a href="#" class="desktop-link">ACCESORIOS <span class="arrow">▾</span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">CARTERAS</a></li>
+                                <li><a href="#">CORREAS</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="#" class="desktop-link">AUDIFONOS 🔥</a></li>
+                        <li><a href="#" class="desktop-link">NOSOTROS 🔥</a></li>
+                        <li><a href="#" class="desktop-link">CONTÁCTANOS</a></li>
                     </ul>
                 </nav>
             </div>
@@ -69,9 +114,91 @@
                         <circle cx="20" cy="21" r="1"></circle>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
+                    <span class="cart-count">0</span>
                 </a>
             </div>
         </div>
+
+        <!-- Overlay (Fondo oscuro al abrir el menú) -->
+        <div class="overlay" id="menuOverlay"></div>
+
+        <!-- Menú Lateral (Side-Nav) Multicanal -->
+        <aside class="side-nav" id="sideNavBar">
+            <div class="side-nav-header">
+                <h2>Menú</h2>
+                <button class="close-btn" id="closeSideNavbarMenu" aria-label="Cerrar menú">
+                    <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <ul class="side-nav-links">
+                <li><a href="#" class="nav-link">VER TODO</a></li>
+
+                <!-- NIVEL 1: RELOJES (Tiene sub-menú) -->
+                <li>
+                    <button class="unstyled-button nav-toggle">Relojes <span class="chevron">▼</span></button>
+                    <div class="sub-menu">
+                        <div class="sub-menu-content">
+                            <ul>
+                                <!-- NIVEL 2: POR MARCA (Tiene sub-menú) -->
+                                <li>
+                                    <button class="unstyled-button nav-toggle">POR MARCA <span
+                                            class="chevron">▼</span></button>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-content">
+                                            <ul>
+                                                <!-- NIVEL 3: Marcas -->
+                                                <li><a href="#" class="nav-link">Curren</a></li>
+                                                <li><a href="#" class="nav-link">Naviforce</a></li>
+                                                <li><a href="#" class="nav-link">Poedagar</a></li>
+                                                <li><a href="#" class="nav-link">Lucky fox</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <!-- NIVEL 2: POR LOOK (Tiene sub-menú) -->
+                                <li>
+                                    <button class="unstyled-button nav-toggle">POR LOOK <span
+                                            class="chevron">▼</span></button>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-content">
+                                            <ul>
+                                                <li><a href="#" class="nav-link">Clásicos</a></li>
+                                                <li><a href="#" class="nav-link">Deportivos</a></li>
+                                                <li><a href="#" class="nav-link">Casuales</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <!-- NIVEL 2: Enlace directo -->
+                                <li><a href="#" class="nav-link">TODO LOS RELOJES</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- NIVEL 1: ACCESORIOS (Tiene sub-menú simple) -->
+                <li>
+                    <button class="unstyled-button nav-toggle">ACCESORIOS <span class="chevron">▼</span></button>
+                    <div class="sub-menu">
+                        <div class="sub-menu-content">
+                            <ul>
+                                <li><a href="#" class="nav-link">CARTERAS</a></li>
+                                <li><a href="#" class="nav-link">CORREAS</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <!-- Enlaces simples -->
+                <li><a href="#" class="nav-link">AUDIFONOS</a></li>
+                <li><a href="#" class="nav-link">NOSOTROS</a></li>
+                <li><a href="#" class="nav-link">CONTÁCTANOS</a></li>
+            </ul>
+        </aside>
     </header>
 </body>
 
