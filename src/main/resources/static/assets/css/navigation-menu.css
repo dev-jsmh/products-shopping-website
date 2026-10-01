@@ -1,3 +1,8 @@
+.no-scroll {
+    overflow: hidden;
+    height: 100vh;
+}
+
 /* Navbar Container */
 .navbar {
     display: flex;
@@ -6,8 +11,9 @@
     background-color: #333;
     padding: 1rem 2rem;
     color: #ffffff;
-    position: relative;
-    z-index: 1000;
+    position: sticky;
+    top: 0;
+    z-index: 100;
     height: 64px;
 }
 
@@ -27,6 +33,12 @@
     /* Space between the search and cart icons */
 }
 
+.nav-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Icons Styling */
 .icon-link {
     color: #ffffff;
@@ -35,59 +47,193 @@
     transition: color 0.3s;
     z-index: 1001;
     /* Keeps cart above the sliding menu if desired */
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: 0px;
+    right: -5px;
+    background-color: #b221cf;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 2px 5px;
+}
+
+.desktop-nav {
+    display: none;
 }
 
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
     letter-spacing: -0.5px;
-    z-index: 1001;
     color: currentColor;
     text-decoration: none;
 }
 
-/* Navigation Links (Desktop) */
-.nav-list {
+
+/* === SIDE NAV BÁSICO === */
+
+.side-nav {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 320px;
+    max-width: 85vw;
+    height: 100vh;
+    background-color: #ffffff;
+    color: #000;
+    z-index: 1000;
+    transition: left 0.3s ease-in-out;
     display: flex;
-    list-style: none;
-    gap: 2rem;
+    flex-direction: column;
 }
 
-.nav-link {
+.side-nav.active {
+    left: 0;
+}
+
+.side-nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.side-nav-header h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.hamburger-btn,
+.close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.hamburger-btn {
     color: #ffffff;
+    font-size: 2rem;
+}
+
+.close-btn {
+    color: #000;
+}
+
+/* Navigation Links (Desktop) */
+.side-nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+}
+
+.side-nav-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* == ACORDÉON (SUB-MENÚS) == */
+.nav-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-link,
+.nav-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 18px 20px;
+    color: #000;
     text-decoration: none;
     font-weight: 600;
+    font-size: 15px;
+    border-bottom: 1px solid #eaeaea;
     text-transform: uppercase;
     font-size: 1rem;
     transition: color 0.3s;
+    box-sizing: border-box;
 }
 
-.nav-link:hover {
-    text-decoration: underline;
+/* Color de fondo sutil para diferenciar niveles */
+
+.sub-menu {
+    background-color: #f2f2f2;
+    /** f9f9f9 */
+    display: grid;
+    grid-template-rows: 0fr;
+    /* Truco de CSS Grid para animar altura */
+    transition: grid-template-rows 0.3s ease;
 }
 
-/* Hamburger Button */
-.hamburger {
-    display: none;
-    /* Hidden on desktop */
-    flex-direction: column;
-    justify-content: space-between;
-    width: 30px;
-    height: 21px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    z-index: 1002;
-    /* Keep above the sliding menu so you can click it to close */
-    /* Keep above the sliding menu */
+.sub-menu.open {
+    grid-template-rows: 1fr;
 }
 
-.hamburger .bar {
+.sub-menu-content {
+    overflow: hidden;
+}
+
+/* Jerarquía visual (sangría para los hijos y nietos) */
+.sub-menu .nav-link,
+.sub-menu .nav-toggle {
+    padding-left: 40px;
+    font-size: 14px;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+/** This is for when there is a sub-menu inside other sub-menu */
+.sub-menu .sub-menu {
+    background-color: #ebebeb;
+}
+
+.sub-menu .sub-menu .nav-link {
+    padding-left: 60px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+    text-transform: capitalize;
+    border-bottom: 1px solid #d8d8d8;
+}
+
+/* Ícono de flecha (Chevron) */
+.chevron {
+    font-size: 10px;
+    transition: transform 0.3s ease;
+}
+
+/* Al abrir, girar la flecha */
+.nav-toggle.active .chevron {
+    transform: rotate(180deg);
+}
+
+/* === OVERLAY === */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 3px;
-    background-color: white;
-    border-radius: 10px;
-    transition: all 0.3s ease;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
 }
 
 /** ------- top bar infinite carousel ------**/
@@ -137,64 +283,178 @@
     }
 }
 
-/* --- Mobile Responsive Styles --- */
-@media (max-width: 768px) {
+/* === ESCRITORIO === */
+@media (min-width: 768px) {
+    .hamburger-btn {
+        display: none;
+    }
+
+    .nav-left {
+        flex: 0;
+    }
+
+    .nav-center {
+        justify-content: flex-start;
+        width: 100%;
+    }
 
     .logo {
-        /* Absolute positioning strictly centers it in the navbar */
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
+        margin-right: 40px;
     }
 
-    /* Show the hamburger icon */
-    .hamburger {
+    .desktop-nav {
+        display: block;
+    }
+
+    .desktop-nav {
+        display: block;
+    }
+
+    .desktop-menu {
         display: flex;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        gap: 15px;
     }
 
-    /* Style the sliding menu */
-    .nav-menu {
-        position: fixed;
-        top: 0;
-        /* Hide off-screen to the left */
-        left: -100%;
-        width: 100%;
-        height: 100vh;
-        background-color: #222;
-        transition: left 0.4s ease-in-out;
-        /* The slide effect */
-        padding-top: 100px;
-        /* Space for the hamburger button */
+    .desktop-menu>li {
+        position: relative;
+        /* Contenedor de referencia para el desplegable Nivel 1 */
+    }
+
+    .desktop-link {
+        color: var(--text-color);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        padding: 25px 10px;
+        /* Incrementa el área interactiva */
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: color 0.2s;
+    }
+
+    .desktop-link:hover {
+        color: var(--accent-color);
+    }
+
+    .arrow {
+        font-size: 9px;
+    }
+
+    .arrow-right {
+        font-size: 10px;
+        float: right;
+    }
+
+    /* --- DESPLEGABLE NIVEL 1 (Caída vertical) --- */
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 220px;
+        background-color: #ffffff;
+        list-style: none;
+        padding: 10px 0;
+        margin: 0;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        border-radius: 0 0 4px 4px;
+
+        /* Estado Oculto con Animación */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.2s ease-in-out;
         z-index: 1000;
     }
 
-    /* When the 'active' class is added via JS, slide it in */
-    .nav-menu.active {
-        left: 0;
+    /* Mostrar al pasar el cursor sobre la categoría padre */
+    .dropdown-parent:hover>.dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
     }
 
-    /* Stack links vertically */
-    .nav-list {
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
+    .dropdown-menu li {
+        position: relative;
+        /* Contenedor de referencia para el desplegable Nivel 2 */
     }
 
-    .nav-link {
-        font-size: 1.5rem;
-        /* Make links a bit larger for full-screen mobile menu */
+    .dropdown-menu a {
+        display: block;
+        padding: 12px 20px;
+        color: #000000;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        transition: background 0.2s, color 0.2s;
     }
 
-    /* Optional: Animate hamburger into an 'X' */
-    .hamburger.active .bar:nth-child(1) {
-        transform: translateY(9px) rotate(45deg);
+    .dropdown-menu a:hover {
+        background-color: #f5f5f5;
+        color: #000000;
     }
 
-    .hamburger.active .bar:nth-child(2) {
+    /* --- DESPLEGABLE NIVEL 2 (Despliegue lateral hacia la derecha) --- */
+    .dropdown-sub-menu {
+        position: absolute;
+        top: 0;
+        left: 100%;
+        width: 200px;
+        background-color: #ffffff;
+        list-style: none;
+        padding: 10px 0;
+        margin: 0;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        border-radius: 0 4px 4px 4px;
+
+        /* Estado Oculto */
         opacity: 0;
+        visibility: hidden;
+        transform: translateX(10px);
+        transition: all 0.2s ease-in-out;
+        z-index: 1001;
     }
 
-    .hamburger.active .bar:nth-child(3) {
-        transform: translateY(-9px) rotate(-45deg);
+    /* Mostrar subnivel al pasar el cursor sobre la subcategoría */
+    .dropdown-sub-parent:hover>.dropdown-sub-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
     }
+
+    .dropdown-sub-menu a {
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: capitalize;
+        color: #444444;
+    }
+
+    /** -- old styles 
+
+    .desktop-nav ul {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        gap: 2rem;
+    }
+
+    .desktop-nav a {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        transition: color 0.3s;
+    }
+
+    .desktop-nav a:hover {
+        text-decoration: underline;
+    }
+    -- **/
 }
