@@ -465,15 +465,15 @@ input:focus {
 }
 
 .copyright-footer {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 40px;
-        color: #fff;
-        background-color: #b221cf;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    color: #fff;
+    background-color: #b221cf;
 
-        >* a {
-            color: #fff;
-            text-decoration: none;
-        }
+    >* a {
+        color: #fff;
+        text-decoration: none;
     }
+}
