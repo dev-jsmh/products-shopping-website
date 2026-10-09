@@ -422,3 +422,51 @@ input:focus {
     margin-right: 6px;
     margin-left: 3px;
 }
+
+
+/*********** footer CSS styling ***********/
+
+.shopping-footer {
+    min-height: 25vh;
+    color: #fff;
+    background-color: #333;
+    padding: 1rem;
+    margin-top: 5rem;
+
+    section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        >* {
+            padding: 0.5rem;
+
+        }
+
+        p {
+            font-weight: 100;
+            font-size: 17px;
+        }
+    }
+
+    .payment-method-logo {
+        background-color: #fff;
+        width: 72px;
+        padding: 0.4rem 0.6rem;
+        margin: 0.3rem
+    }
+}
+
+.copyright-footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+        color: #fff;
+        background-color: #b221cf;
+
+        >* a {
+            color: #fff;
+            text-decoration: none;
+        }
+    }

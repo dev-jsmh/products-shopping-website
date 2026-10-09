@@ -1,0 +1,34 @@
+<div th:fragment="shopping-footer">
+    <footer class="shopping-footer col-12">
+        <div class="row">
+            <section class="col-12 col-md-4">
+                <p>📅 Horarios de atención</p>
+                <p>Lunes a viernes</p>
+                <p>9:00am a 5:00pm</p>
+            </section>
+            <section class="col-12 col-md-4">
+                <p>Soporte técnico ☎️</p>
+                <p>3135681002</p>
+            </section>
+            <section class="col-12 col-md-4">
+                <p>Métodos de pago</p>
+                <div class="row">
+                    <img class="payment-method-logo" th:src="@{/assets/logos/pse-logo.webp}" alt="pse logo image"
+                        aria-label="PSE logo">
+                    <img class="payment-method-logo" th:src="@{/assets/logos/bancolombia-logo.svg}"
+                        aria-label="Bancolombia logo" alt="bancolombia logo image">
+                    <img class="payment-method-logo" th:src="@{/assets/logos/visa-logo.svg}" alt="visa logo image"
+                        aria-label="Visa logo">
+                    <img class="payment-method-logo" th:src="@{/assets/logos/nequi-logo.svg}" alt="nequi logo image"
+                        aria-label="Nequi logo">
+                    <img class="payment-method-logo" th:src="@{/assets/logos/mastercard-logo.svg}"
+                        alt="mastercard logo image" aria-label="Mastercard logo">
+                </div>
+            </section>
+        </div>
+    </footer>
+    <section class="copyright-footer col-12">
+        <p>Copyright &#169 2026 desarrollado con ❤️ por <a href="https://github.com/dev-jsmh" target="_blank">Jhonatan
+                Martinez</a></p>
+    </section>
+</div>
