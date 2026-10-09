@@ -433,10 +433,11 @@ input:focus {
     padding: 1rem;
     margin-top: 5rem;
 
-    section {
+    & section {
         display: flex;
         flex-direction: column;
         align-items: center;
+        margin-bottom: 2rem;
 
         >* {
             padding: 0.5rem;
@@ -449,6 +450,12 @@ input:focus {
         }
     }
 
+    .payment-methods-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
     .payment-method-logo {
         background-color: #fff;
         width: 72px;
@@ -458,15 +465,29 @@ input:focus {
 }
 
 .copyright-footer {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 40px;
-        color: #fff;
-        background-color: #b221cf;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    color: #fff;
+    background-color: #b221cf;
 
-        >* a {
-            color: #fff;
-            text-decoration: none;
-        }
+    >* a {
+        color: #fff;
+        text-decoration: none;
     }
+
+    &>* a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    &>* a:hover {
+        color: #000;
+        text-decoration: underline;
+    }
+
+    & p {
+        text-align: center;
+    }
+}
